@@ -1,0 +1,39 @@
+{
+  "name": "campus-connect-placement-management",
+  "version": "1.0.0",
+  "description": "Campus Connect Placement Management System",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "nodemon server.js",
+    "backend": "cd backend && npm run dev",
+    "frontend": "cd frontend && npm run dev",
+    "install:all": "npm install && cd backend && npm install && cd ../frontend && npm install",
+    "chat": "nodemon server.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "placement",
+    "management",
+    "campus",
+    "connect"
+  ],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.21.2",
+    "socket.io": "^4.8.1"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.22"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/debenmohanty/Placement-Management.git"
+  },
+  "bugs": {
+    "url": "https://github.com/debenmohanty/Placement-Management/issues"
+  },
+  "homepage": "https://github.com/debenmohanty/Placement-Management#readme"
+}

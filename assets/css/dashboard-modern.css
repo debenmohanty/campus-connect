@@ -1,0 +1,247 @@
+/* Modern Dashboard CSS Extensions */
+:root {
+    --primary-color: #4361ee;
+    --primary-light: #6c8aff;
+    --primary-dark: #2541b2;
+    --primary-hover: #3a56d4;
+    --secondary-color: #2d3748;
+    --success-color: #48bb78;
+    --danger-color: #e53e3e;
+    --warning-color: #ed8936;
+    --info-color: #4299e1;
+    --radius-sm: 6px;
+    --radius-md: 10px;
+    --radius-lg: 15px;
+    --transition: all 0.3s ease;
+}
+
+/* Animation Effects */
+@keyframes float {
+    0% { transform: translateY(0px); }
+    50% { transform: translateY(-10px); }
+    100% { transform: translateY(0px); }
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+        box-shadow: 0 0 0 0 rgba(67, 97, 238, 0.7);
+    }
+    70% {
+        transform: scale(1.05);
+        box-shadow: 0 0 0 10px rgba(67, 97, 238, 0);
+    }
+    100% {
+        transform: scale(1);
+        box-shadow: 0 0 0 0 rgba(67, 97, 238, 0);
+    }
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideInLeft {
+    from { opacity: 0; transform: translateX(-30px); }
+    to { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes shimmer {
+    0% { background-position: -468px 0; }
+    100% { background-position: 468px 0; }
+}
+
+/* Modern visual effects */
+.floating-btn {
+    animation: float 3s ease-in-out infinite;
+}
+
+.pulsing {
+    animation: pulse 2s infinite;
+}
+
+.gradient-text {
+    background: linear-gradient(45deg, var(--primary-color), var(--primary-light));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    color: transparent;
+}
+
+.glass-card {
+    background: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(10px);
+    border-radius: var(--radius-md);
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    box-shadow: 0 8px 32px rgba(31, 38, 135, 0.1);
+}
+
+/* Modern design patterns */
+.bg-pattern {
+    background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%234361ee' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+}
+
+.gradient-border {
+    border: 1px solid transparent;
+    background-image: linear-gradient(white, white), 
+                      linear-gradient(to right, var(--primary-light), var(--primary-color));
+    background-origin: border-box;
+    background-clip: content-box, border-box;
+}
+
+/* Animations for page elements */
+.fade-in {
+    animation: fadeIn 0.8s ease-out forwards;
+}
+
+.slide-in-left {
+    animation: slideInLeft 0.6s ease-out forwards;
+    opacity: 0;
+}
+
+/* Loading effects */
+.shimmer-effect {
+    background: linear-gradient(to right, rgba(67, 97, 238, 0.05) 8%, rgba(67, 97, 238, 0.1) 18%, rgba(67, 97, 238, 0.05) 33%);
+    background-size: 800px 104px;
+    animation: shimmer 1.5s linear infinite;
+}
+
+/* Profile enhancements */
+.profile-photo-container {
+    position: relative;
+    width: 150px;
+    height: 150px;
+    border-radius: 15px;
+    overflow: hidden;
+    border: 3px solid white;
+    transition: all 0.4s ease;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.profile-photo-container:hover {
+    transform: scale(1.03) rotate(2deg);
+    box-shadow: 0 15px 25px rgba(0, 0, 0, 0.1);
+    border-color: var(--primary-light);
+}
+
+.profile-photo {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+}
+
+.profile-photo-container:hover .profile-photo {
+    transform: scale(1.1);
+}
+
+.photo-upload-label {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.8), transparent);
+    color: white;
+    padding: 10px 0;
+    text-align: center;
+    font-size: 0.85rem;
+    cursor: pointer;
+    opacity: 0;
+    transform: translateY(100%);
+    transition: all 0.3s ease;
+}
+
+.profile-photo-container:hover .photo-upload-label {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.profile-tag {
+    background: linear-gradient(120deg, var(--primary-light), var(--primary-color));
+    color: white;
+    padding: 5px 15px;
+    border-radius: 30px;
+    font-size: 0.8rem;
+    font-weight: 500;
+    box-shadow: 0 2px 10px rgba(67, 97, 238, 0.2);
+    transition: all 0.3s;
+    animation: fadeIn 0.5s forwards;
+    animation-delay: calc(var(--i, 0) * 0.1s);
+    opacity: 0;
+}
+
+.profile-tag:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(67, 97, 238, 0.3);
+}
+
+/* Timeline styling */
+.timeline-container {
+    position: relative;
+    padding-left: 30px;
+}
+
+.timeline-container::before {
+    content: '';
+    position: absolute;
+    left: 10px;
+    top: 10px;
+    bottom: 10px;
+    width: 2px;
+    background-color: rgba(67, 97, 238, 0.2);
+    border-radius: 10px;
+}
+
+.timeline-item {
+    position: relative;
+    margin-bottom: 25px;
+    padding: 20px;
+    background-color: white;
+    border-radius: var(--radius-md);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.03);
+    border: 1px solid rgba(226, 232, 240, 0.8);
+    transition: all 0.3s ease;
+    opacity: 0;
+    animation: slideInLeft 0.6s ease-out forwards;
+}
+
+.timeline-item:hover {
+    transform: translateX(5px);
+    box-shadow: 0 10px 15px rgba(0, 0, 0, 0.07);
+}
+
+.timeline-item::before {
+    content: '';
+    position: absolute;
+    left: -40px;
+    top: 25px;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background-color: var(--primary-color);
+    border: 3px solid white;
+    box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.3);
+    z-index: 1;
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+}
+
+::-webkit-scrollbar-track {
+    background-color: rgba(226, 232, 240, 0.5);
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: linear-gradient(to bottom, var(--primary-light), var(--primary-color));
+    border-radius: 10px;
+    transition: all 0.3s;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(to bottom, var(--primary-color), var(--primary-dark));
+} 

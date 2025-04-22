@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register - Campus Connect</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #4361ee;
+            --primary-hover: #3a56d4;
+            --secondary-color: #2d3748;
+            --accent-color: #00b4d8;
+            --background-light: #f8f9fa;
+            --text-color: #2d3748;
+            --text-light: #718096;
+            --success-color: #48bb78;
+            --info-color: #4299e1;
+            --warning-color: #ed8936;
+            --danger-color: #f56565;
+            --border-radius: 8px;
+            --transition-speed: 0.3s;
+            --box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, rgba(67, 97, 238, 0.1) 0%, rgba(58, 12, 163, 0.1) 100%), url('https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80') center center/cover;
+            background-attachment: fixed;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .register-container {
+            background-color: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            box-shadow: var(--box-shadow);
+            width: 100%;
+            max-width: 680px;
+            padding: 40px;
+            animation: fadeInUp 0.8s ease-out;
+            position: relative;
+            overflow: hidden;
+            margin: 50px 0;
+        }
+        
+        .register-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 6px;
+            height: 100%;
+            background: linear-gradient(to bottom, var(--primary-color), var(--accent-color));
+        }
+
+        .register-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .register-header h1 {
+            color: var(--primary-color);
+            font-size: 2.2rem;
+            margin-bottom: 10px;
+        }
+        
+        .register-header p {
+            color: var(--text-light);
+            font-size: 1rem;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: var(--text-color);
+            font-weight: 500;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #e2e8f0;
+            border-radius: var(--border-radius);
+            font-size: 16px;
+            transition: all 0.3s ease;
+            background-color: #ffffff;
+        }
+
+        .form-control:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.15);
+            outline: none;
+        }
+
+        .form-row {
+            display: flex;
+            gap: 15px;
+        }
+
+        .form-row .form-group {
+            flex: 1;
+        }
+
+        .user-type-selector {
+            display: flex;
+            margin-bottom: 25px;
+            justify-content: center;
+            gap: 15px;
+        }
+
+        .user-type-option {
+            flex: 1;
+            text-align: center;
+            padding: 12px;
+            border: 2px solid #e2e8f0;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .user-type-option:hover {
+            border-color: var(--primary-color);
+        }
+
+        .user-type-option.active {
+            border-color: var(--primary-color);
+            background-color: rgba(67, 97, 238, 0.08);
+        }
+
+        .user-type-option i {
+            display: block;
+            font-size: 24px;
+            margin-bottom: 8px;
+            color: var(--primary-color);
+        }
+
+        .user-type-option span {
+            display: block;
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--text-color);
+        }
+
+        .form-section {
+            display: none;
+        }
+
+        .form-section.active {
+            display: block;
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        .btn {
+            display: block;
+            width: 100%;
+            padding: 14px;
+            border: none;
+            border-radius: var(--border-radius);
+            background-color: var(--primary-color);
+            color: white;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+        
+        .btn:hover {
+            background-color: var(--primary-hover);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(67, 97, 238, 0.3);
+        }
+
+        .login-link {
+            text-align: center;
+            margin-top: 25px;
+            font-size: 14px;
+            color: var(--text-light);
+        }
+        
+        .login-link a {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .login-link a:hover {
+            color: var(--primary-hover);
+            text-decoration: underline;
+        }
+
+        .back-to-home {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            color: var(--primary-color);
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .back-to-home i {
+            margin-right: 5px;
+        }
+
+        .back-to-home:hover {
+            color: var(--primary-hover);
+        }
+
+        .form-check {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .form-check input {
+            margin-right: 10px;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .register-container {
+                padding: 25px;
+                margin: 20px;
+            }
+            
+            .form-row {
+                flex-direction: column;
+                gap: 0;
+            }
+
+            .user-type-selector {
+                flex-direction: column;
+                gap: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <a href="index.html" class="back-to-home">
+        <i class="fas fa-arrow-left"></i> Back to Home
+    </a>
+
+    <div class="register-container">
+        <div class="register-header">
+            <h1>Create Account</h1>
+            <p>Join Campus Connect to access placement opportunities</p>
+        </div>
+        
+        <div class="user-type-selector">
+            <div class="user-type-option active" data-type="student">
+                <i class="fas fa-user-graduate"></i>
+                <span>Student</span>
+            </div>
+            <div class="user-type-option" data-type="faculty">
+                <i class="fas fa-chalkboard-teacher"></i>
+                <span>Faculty</span>
+            </div>
+            <div class="user-type-option" data-type="company">
+                <i class="fas fa-building"></i>
+                <span>Company</span>
+            </div>
+        </div>
+        
+        <form id="register-form">
+            <input type="hidden" id="user-type" name="userType" value="student">
+            
+            <!-- Common fields for all user types -->
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="first-name">First Name</label>
+                    <input type="text" id="first-name" name="firstName" class="form-control" placeholder="Enter your first name" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="last-name">Last Name</label>
+                    <input type="text" id="last-name" name="lastName" class="form-control" placeholder="Enter your last name" required>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label for="profile-image">Profile Image</label>
+                <div style="display: flex; flex-direction: column; align-items: center; gap: 10px; margin-bottom: 10px;">
+                    <img id="profile-image-preview" src="https://via.placeholder.com/150?text=Profile" alt="Profile Preview" style="width: 150px; height: 150px; border-radius: 50%; object-fit: cover; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
+                    <input type="file" id="profile-image" name="profileImage" accept="image/*" style="display: none;">
+                    <label for="profile-image" style="background-color: var(--primary-color); color: white; padding: 8px 15px; border-radius: var(--border-radius); cursor: pointer; font-size: 0.9rem; transition: all 0.3s ease;">Choose Image</label>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label for="email">Email Address</label>
+                <input type="email" id="email" name="email" class="form-control" placeholder="Enter your email" required>
+            </div>
+            
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" class="form-control" placeholder="Create a password" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="confirm-password">Confirm Password</label>
+                    <input type="password" id="confirm-password" name="confirmPassword" class="form-control" placeholder="Confirm your password" required>
+                </div>
+            </div>
+            
+            <!-- Student specific fields -->
+            <div id="student-fields" class="form-section active">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="student-id">Student ID</label>
+                        <input type="text" id="student-id" name="studentId" class="form-control" placeholder="Enter your student ID">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="roll-number">Roll Number</label>
+                        <input type="text" id="roll-number" name="rollNumber" class="form-control" placeholder="Enter your roll number">
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="degree">Degree</label>
+                        <select id="degree" name="degree" class="form-control">
+                            <option value="">Select your degree</option>
+                            <option value="B.Tech">B.Tech</option>
+                            <option value="M.Tech">M.Tech</option>
+                            <option value="BCA">BCA</option>
+                            <option value="MCA">MCA</option>
+                            <option value="B.Sc">B.Sc</option>
+                            <option value="M.Sc">M.Sc</option>
+                            <option value="MBA">MBA</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="branch">Branch/Specialization</label>
+                        <input type="text" id="branch" name="branch" class="form-control" placeholder="E.g., Computer Science">
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="year-of-graduation">Year of Graduation</label>
+                    <select id="year-of-graduation" name="yearOfGraduation" class="form-control">
+                        <option value="">Select year</option>
+                        <option value="2023">2023</option>
+                        <option value="2024">2024</option>
+                        <option value="2025">2025</option>
+                        <option value="2026">2026</option>
+                        <option value="2027">2027</option>
+                    </select>
+                </div>
+            </div>
+            
+            <!-- Faculty specific fields -->
+            <div id="faculty-fields" class="form-section">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="faculty-id">Faculty ID</label>
+                        <input type="text" id="faculty-id" name="facultyId" class="form-control" placeholder="Enter your faculty ID">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="department">Department</label>
+                        <input type="text" id="department" name="department" class="form-control" placeholder="E.g., Computer Science">
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="designation">Designation</label>
+                    <select id="designation" name="designation" class="form-control">
+                        <option value="">Select designation</option>
+                        <option value="Assistant Professor">Assistant Professor</option>
+                        <option value="Associate Professor">Associate Professor</option>
+                        <option value="Professor">Professor</option>
+                        <option value="Head of Department">Head of Department</option>
+                        <option value="Dean">Dean</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="specialization">Specialization</label>
+                    <input type="text" id="specialization" name="specialization" class="form-control" placeholder="Your area of expertise">
+                </div>
+            </div>
+            
+            <!-- Company specific fields -->
+            <div id="company-fields" class="form-section">
+                <div class="form-group">
+                    <label for="company-name">Company Name</label>
+                    <input type="text" id="company-name" name="companyName" class="form-control" placeholder="Enter company name">
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="industry">Industry</label>
+                        <select id="industry" name="industry" class="form-control">
+                            <option value="">Select industry</option>
+                            <option value="Information Technology">Information Technology</option>
+                            <option value="Finance">Finance</option>
+                            <option value="Healthcare">Healthcare</option>
+                            <option value="Manufacturing">Manufacturing</option>
+                            <option value="Consulting">Consulting</option>
+                            <option value="Education">Education</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="company-size">Company Size</label>
+                        <select id="company-size" name="companySize" class="form-control">
+                            <option value="">Select company size</option>
+                            <option value="1-50">1-50 employees</option>
+                            <option value="51-200">51-200 employees</option>
+                            <option value="201-500">201-500 employees</option>
+                            <option value="501-1000">501-1000 employees</option>
+                            <option value="1001+">1001+ employees</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="website">Company Website</label>
+                    <input type="url" id="website" name="website" class="form-control" placeholder="https://example.com">
+                </div>
+                
+                <div class="form-group">
+                    <label for="recruiter-position">Your Position</label>
+                    <input type="text" id="recruiter-position" name="recruiterPosition" class="form-control" placeholder="E.g., HR Manager, Talent Acquisition">
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <div class="form-check">
+                    <input type="checkbox" id="terms" name="terms" required>
+                    <label for="terms">I agree to the <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a></label>
+                </div>
+            </div>
+            
+            <button type="submit" class="btn">Create Account</button>
+            
+            <div class="login-link">
+                Already have an account? <a href="login.html">Login here</a>
+            </div>
+        </form>
+    </div>
+    
+    <script>
+        // Change active user type
+        const userTypeOptions = document.querySelectorAll('.user-type-option');
+        const userTypeInput = document.getElementById('user-type');
+        const formSections = document.querySelectorAll('.form-section');
+
+        userTypeOptions.forEach(option => {
+            option.addEventListener('click', () => {
+                // Remove active class from all options
+                userTypeOptions.forEach(opt => opt.classList.remove('active'));
+                
+                // Add active class to clicked option
+                option.classList.add('active');
+                
+                // Update hidden input value
+                const userType = option.getAttribute('data-type');
+                userTypeInput.value = userType;
+                
+                // Show corresponding form fields
+                formSections.forEach(section => {
+                    section.classList.remove('active');
+                });
+                
+                document.getElementById(`${userType}-fields`).classList.add('active');
+            });
+        });
+
+        // Form submission
+        document.getElementById('register-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const userType = userTypeInput.value;
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const confirmPassword = document.getElementById('confirm-password').value;
+            
+            // Validate passwords match
+            if (password !== confirmPassword) {
+                alert('Passwords do not match!');
+                return;
+            }
+            
+            // Collect common form data
+            const userData = {
+                firstName: document.getElementById('first-name').value,
+                lastName: document.getElementById('last-name').value,
+                email: email,
+                password: password,
+                userType: userType,
+                role: userType,
+                registrationDate: new Date().toISOString(),
+                profileImage: document.getElementById('profile-image-preview').src !== 'https://via.placeholder.com/150?text=Profile' ? document.getElementById('profile-image-preview').src : null
+            };
+            
+            // Add user type specific data
+            if (userType === 'student') {
+                userData.studentId = document.getElementById('student-id').value;
+                userData.rollNumber = document.getElementById('roll-number').value;
+                userData.degree = document.getElementById('degree').value;
+                userData.branch = document.getElementById('branch').value;
+                userData.yearOfGraduation = document.getElementById('year-of-graduation').value;
+            } else if (userType === 'faculty') {
+                userData.facultyId = document.getElementById('faculty-id').value;
+                userData.department = document.getElementById('department').value;
+                userData.designation = document.getElementById('designation').value;
+                userData.specialization = document.getElementById('specialization').value;
+            } else if (userType === 'company') {
+                userData.companyName = document.getElementById('company-name').value;
+                userData.industry = document.getElementById('industry').value;
+                userData.companySize = document.getElementById('company-size').value;
+                userData.website = document.getElementById('website').value;
+                userData.recruiterPosition = document.getElementById('recruiter-position').value;
+            }
+            
+            try {
+                // Get existing users or initialize empty object
+                const users = JSON.parse(localStorage.getItem('campusConnectUsers')) || {};
+                
+                // Check if email already exists
+                if (users[email]) {
+                    alert('An account with this email already exists. Please login or use a different email.');
+                    return;
+                }
+                
+                // Add the new user
+                users[email] = userData;
+                
+                // Save to localStorage
+                localStorage.setItem('campusConnectUsers', JSON.stringify(users));
+                
+                console.log('Registration successful!');
+                alert('Registration successful! Please log in.');
+                
+                // Redirect to login page
+                window.location.href = 'login.html';
+                
+            } catch (error) {
+                console.error('Registration error:', error);
+                alert('An error occurred during registration. Please try again.');
+            }
+        });
+
+        // Profile image preview functionality
+        document.getElementById('profile-image').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file && file.type.match('image.*')) {
+                const reader = new FileReader();
+                reader.onload = function(event) {
+                    document.getElementById('profile-image-preview').src = event.target.result;
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+    </script>
+</body>
+</html> 

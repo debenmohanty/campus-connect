@@ -1,0 +1,3236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Company Dashboard | Campus Connect</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Load internships.js first to ensure functions are available -->
+    <script src="assets/js/internships.js"></script>
+    <!-- Load applicants.js for handling student applicants -->
+    <script src="assets/js/applicants.js"></script>
+    <style>
+        :root {
+            --primary-color: #4a6fdc;
+            --secondary-color: #5a8dee;
+            --accent-color: #38b2ac;
+            --text-color: #2d3748;
+            --text-light: #718096;
+            --bg-color: #f7fafc;
+            --danger-color: #e53e3e;
+            --success-color: #48bb78;
+            --warning-color: #ed8936;
+            --info-color: #4299e1;
+            --border-radius: 8px;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+        
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            min-height: 100vh;
+            display: flex;
+        }
+        
+        .sidebar {
+            width: 250px;
+            background: linear-gradient(to bottom, var(--primary-color), var(--secondary-color));
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            padding: 20px 0;
+            transition: all 0.3s ease;
+            z-index: 1000;
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+        }
+        
+        .sidebar .profile {
+            text-align: center;
+            padding: 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            margin-bottom: 20px;
+        }
+        
+        .sidebar .profile .profile-img {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            overflow: hidden;
+            margin: 0 auto 10px;
+            background-color: rgba(255, 255, 255, 0.2);
+            border: 3px solid rgba(255, 255, 255, 0.3);
+        }
+        
+        .sidebar .profile .profile-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .sidebar .profile .user-name {
+            font-weight: 600;
+            color: white;
+            margin-bottom: 5px;
+        }
+        
+        .sidebar .profile .user-role {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 0.8rem;
+        }
+        
+        .sidebar .menu {
+            padding: 0 10px;
+        }
+        
+        .sidebar .menu .menu-item {
+            display: flex;
+            align-items: center;
+            padding: 12px 15px;
+            color: white;
+            border-radius: var(--border-radius);
+            margin-bottom: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+        }
+        
+        .sidebar .menu .menu-item i {
+            margin-right: 10px;
+            font-size: 1.1rem;
+        }
+        
+        .sidebar .menu .menu-item span {
+            font-size: 0.9rem;
+        }
+        
+        .sidebar .menu .menu-item:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+        
+        .sidebar .menu .menu-item.active {
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+        
+        .sidebar .logout-btn {
+            margin-top: 20px;
+            display: flex;
+            align-items: center;
+            padding: 12px 15px;
+            color: white;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin: 20px 10px;
+            text-decoration: none;
+        }
+        
+        .sidebar .logout-btn i {
+            margin-right: 10px;
+            font-size: 1.1rem;
+        }
+        
+        .sidebar .logout-btn:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+        
+        .main-content {
+            flex: 1;
+            margin-left: 250px;
+            padding: 20px;
+            transition: all 0.3s ease;
+        }
+        
+        .top-bar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background-color: white;
+            padding: 15px 20px;
+            border-radius: var(--border-radius);
+            margin-bottom: 20px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+        }
+        
+        .top-bar .hamburger {
+            display: none;
+            margin-right: 15px;
+            cursor: pointer;
+            font-size: 1.2rem;
+        }
+        
+        .top-bar h1 {
+            font-size: 1.5rem;
+            color: var(--text-color);
+            margin: 0;
+        }
+        
+        .content-area {
+            padding: 20px;
+            background-color: white;
+            border-radius: var(--border-radius);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+        }
+        
+        .content-section {
+            display: none;
+        }
+        
+        .content-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--text-color);
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #edf2f7;
+        }
+        
+        /* Dashboard Overview */
+        .dashboard-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .stat-card {
+            background-color: white;
+            border-radius: var(--border-radius);
+            padding: 20px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .stat-card .stat-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 15px;
+            font-size: 1.5rem;
+        }
+        
+        .stat-card .stat-value {
+            font-size: 1.8rem;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+        
+        .stat-card .stat-label {
+            color: var(--text-light);
+            font-size: 0.9rem;
+        }
+        
+        .recent-item {
+            padding: 15px;
+            border-bottom: 1px solid #edf2f7;
+            display: flex;
+            align-items: center;
+        }
+        
+        .recent-item:last-child {
+            border-bottom: none;
+        }
+        
+        .recent-item .item-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            font-size: 1.2rem;
+        }
+        
+        .recent-item .item-content {
+            flex: 1;
+        }
+        
+        .recent-item .item-title {
+            font-weight: 500;
+            margin-bottom: 3px;
+        }
+        
+        .recent-item .item-meta {
+            display: flex;
+            color: var(--text-light);
+            font-size: 0.8rem;
+        }
+        
+        .recent-item .item-date {
+            margin-right: 15px;
+        }
+        
+        .chart-container {
+            margin: 20px 0;
+            border-radius: var(--border-radius);
+            padding: 20px;
+            background-color: white;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+        }
+        
+        /* Profile Completion Bar */
+        .profile-completion {
+            background-color: white;
+            border-radius: var(--border-radius);
+            padding: 15px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+            margin-bottom: 20px;
+        }
+        
+        .profile-completion .completion-info {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+        
+        .profile-completion .completion-label {
+            font-weight: 500;
+        }
+        
+        .profile-completion .completion-percentage {
+            color: var(--primary-color);
+        }
+        
+        .profile-completion .progress-bar {
+            height: 8px;
+            background-color: #edf2f7;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        
+        .profile-completion .progress {
+            height: 100%;
+            background-color: var(--primary-color);
+            border-radius: 10px;
+            width: 0%; /* Will be set by JS */
+        }
+        
+        /* Responsive Styles */
+        @media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-250px);
+            }
+            
+            .sidebar.active {
+                transform: translateX(0);
+            }
+            
+            .main-content {
+                margin-left: 0;
+            }
+            
+            .top-bar .hamburger {
+                display: block;
+            }
+            
+            .dashboard-stats {
+                grid-template-columns: 1fr;
+            }
+            
+            .sidebar .logout-btn {
+                position: static;
+            }
+        }
+        
+        /* Internship form styling - existing code will be preserved */
+        
+        /* Company Profile Styling */
+        .profile-section {
+            background-color: #fff;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        
+        .profile-section h3 {
+            margin-top: 0;
+            margin-bottom: 15px;
+            color: #333;
+            font-size: 1.2rem;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 10px;
+        }
+        
+        .form-row {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 15px;
+        }
+        
+        @media (max-width: 768px) {
+            .form-row {
+                flex-direction: column;
+                gap: 10px;
+            }
+        }
+        
+        .form-group {
+            flex: 1;
+            margin-bottom: 15px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 500;
+            color: #333;
+        }
+        
+        .form-group input[type="text"],
+        .form-group input[type="email"],
+        .form-group input[type="tel"],
+        .form-group input[type="url"],
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-family: inherit;
+            font-size: 14px;
+        }
+        
+        .form-group input[type="file"] {
+            display: none;
+        }
+        
+        .logo-upload-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        #company-logo-preview {
+            width: 150px;
+            height: 150px;
+            object-fit: cover;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+        }
+        
+        .upload-btn {
+            background-color: #4361ee;
+            color: white;
+            padding: 8px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            text-align: center;
+            transition: background-color 0.3s;
+        }
+        
+        .upload-btn:hover {
+            background-color: #3a56d4;
+        }
+        
+        .required {
+            color: #e53e3e;
+        }
+        
+        .form-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: flex-end;
+            margin-top: 20px;
+        }
+        
+        .primary-btn {
+            background-color: #4361ee;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: background-color 0.3s;
+        }
+        
+        .primary-btn:hover {
+            background-color: #3a56d4;
+        }
+        
+        .secondary-btn {
+            background-color: #f8f9fa;
+            color: #333;
+            border: 1px solid #ddd;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+        
+        .secondary-btn:hover {
+            background-color: #e9ecef;
+        }
+        
+        /* Applicant Card Styles */
+        .applicants-container {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .applicant-card {
+            background-color: white;
+            border-radius: 8px;
+            padding: 15px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .applicant-card .applicant-info {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .applicant-card .applicant-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        
+        .applicant-card .applicant-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            overflow: hidden;
+            margin-right: 10px;
+        }
+        
+        .applicant-card .applicant-details {
+            flex: 1;
+        }
+        
+        .applicant-card .applicant-name {
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+        
+        .applicant-card .applicant-position {
+            color: var(--text-light);
+            font-size: 0.9rem;
+        }
+        
+        .applicant-card .application-date {
+            color: var(--text-light);
+            font-size: 0.8rem;
+        }
+        
+        .applicant-card .applicant-education {
+            margin-bottom: 10px;
+        }
+        
+        .applicant-card .applicant-education p {
+            margin: 0;
+            font-size: 0.9rem;
+        }
+        
+        .applicant-card .status-badge {
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            margin-top: 5px;
+        }
+        
+        .applicant-card .applicant-actions {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 10px;
+        }
+        
+        .applicant-card .btn-view-profile,
+        .applicant-card .btn-accept,
+        .applicant-card .btn-reject {
+            padding: 8px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        .applicant-card .btn-view-profile {
+            background-color: #f8f9fa;
+            color: #333;
+        }
+        
+        .applicant-card .btn-accept {
+            background-color: #48bb78;
+            color: white;
+        }
+        
+        .applicant-card .btn-reject {
+            background-color: #e53e3e;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="sidebar">
+        <div class="profile">
+            <div class="profile-img">
+                <img id="sidebar-profile-image" src="https://via.placeholder.com/80x80?text=Logo" alt="Company Logo">
+            </div>
+            <div class="user-name">Company Name</div>
+            <div class="user-role">Employer</div>
+        </div>
+        
+        <div class="menu">
+            <div class="menu-item active" data-content="dashboard-content">
+                <i class="fas fa-tachometer-alt"></i>
+                <span>Dashboard</span>
+            </div>
+            <div class="menu-item" data-content="postInternship-content">
+                <i class="fas fa-plus-circle"></i>
+                <span>Post Internship</span>
+            </div>
+            <div class="menu-item" data-content="postedInternships-content">
+                <i class="fas fa-briefcase"></i>
+                <span>Posted Internships</span>
+            </div>
+            <div class="menu-item" data-content="applicants-content">
+                <i class="fas fa-users"></i>
+                <span>Applicants</span>
+            </div>
+            <div class="menu-item" data-content="company-profile-content">
+                <i class="fas fa-building"></i>
+                <span>Company Profile</span>
+            </div>
+            <div class="menu-item" data-content="settings-content">
+                <i class="fas fa-cog"></i>
+                <span>Settings</span>
+            </div>
+        </div>
+        
+        <a href="#" id="logout-btn" class="logout-btn">
+            <i class="fas fa-sign-out-alt"></i>
+            <span>Logout</span>
+        </a>
+    </div>
+    
+    <div class="main-content">
+        <div class="top-bar">
+            <div class="left">
+                <i class="fas fa-bars hamburger"></i>
+                <h1>Company Dashboard</h1>
+            </div>
+            <div class="right">
+                <div class="profile-completion">
+                    <div class="completion-info">
+                        <div class="completion-label">Profile Completion</div>
+                        <div class="completion-percentage">0%</div>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress" style="width: 0%"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="content-area">
+            <!-- Dashboard Overview Section -->
+            <div id="dashboard-content" class="content-section" style="display: block;">
+                <div class="content-title">Dashboard Overview</div>
+                
+                <div style="background-color: rgba(72, 187, 120, 0.1); border-left: 4px solid var(--success-color); padding: 15px; margin-bottom: 20px; border-radius: 4px;">
+                    <div style="display: flex; align-items: center; margin-bottom: 8px;">
+                        <i class="fas fa-info-circle" style="color: var(--success-color); margin-right: 10px; font-size: 1.2rem;"></i>
+                        <h3 style="margin: 0; font-size: 1.1rem; color: var(--success-color);">New Feature: Student Profiles</h3>
+                    </div>
+                    <p style="margin: 0; color: var(--text-color);">
+                        You can now view detailed student profiles from the Applicants section. Click on "View Profile" to see complete details about applicants including their education, skills, projects, and more.
+                    </p>
+                </div>
+                
+                <div class="dashboard-stats">
+                    <div class="stat-card">
+                        <div class="stat-icon" style="background-color: rgba(74, 111, 220, 0.1); color: var(--primary-color);">
+                            <i class="fas fa-briefcase"></i>
+                        </div>
+                        <div class="stat-value">0</div>
+                        <div class="stat-label">Posted Internships</div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-icon" style="background-color: rgba(72, 187, 120, 0.1); color: var(--success-color);">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <div class="stat-value">0</div>
+                        <div class="stat-label">Total Applicants</div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-icon" style="background-color: rgba(237, 137, 54, 0.1); color: var(--warning-color);">
+                            <i class="fas fa-clock"></i>
+                        </div>
+                        <div class="stat-value">0</div>
+                        <div class="stat-label">Pending Reviews</div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-icon" style="background-color: rgba(66, 153, 225, 0.1); color: var(--info-color);">
+                            <i class="fas fa-check-circle"></i>
+                        </div>
+                        <div class="stat-value">0</div>
+                        <div class="stat-label">Accepted Offers</div>
+                    </div>
+                </div>
+                
+                <div style="margin-bottom: 30px;">
+                    <h2 style="font-size: 1.2rem; margin-bottom: 15px; color: var(--text-color);">Recent Applications</h2>
+                    <div style="background-color: white; border-radius: var(--border-radius); overflow: hidden; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);">
+                        <div class="empty-state" style="text-align: center; padding: 50px 20px;">
+                            <i class="fas fa-inbox" style="font-size: 3rem; color: var(--primary-color); margin-bottom: 20px;"></i>
+                            <h3 style="color: var(--text-color); margin-bottom: 10px;">No Recent Applications</h3>
+                            <p style="color: var(--text-light); max-width: 600px; margin: 0 auto;">
+                                You haven't received any applications for your internship postings yet. Post more internships to attract talented students.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div>
+                    <h2 style="font-size: 1.2rem; margin-bottom: 15px; color: var(--text-color);">Quick Actions</h2>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 15px;">
+                        <button class="quick-action-btn" style="background-color: var(--primary-color); color: white; border: none; border-radius: var(--border-radius); padding: 15px; text-align: left; cursor: pointer; display: flex; align-items: center;" onclick="navigateToSection('postInternship')">
+                            <i class="fas fa-plus-circle" style="margin-right: 10px; font-size: 1.2rem;"></i>
+                            <span>Post New Internship</span>
+                        </button>
+                        
+                        <button class="quick-action-btn" style="background-color: var(--secondary-color); color: white; border: none; border-radius: var(--border-radius); padding: 15px; text-align: left; cursor: pointer; display: flex; align-items: center;" onclick="navigateToSection('company-profile')">
+                            <i class="fas fa-edit" style="margin-right: 10px; font-size: 1.2rem;"></i>
+                            <span>Update Company Profile</span>
+                        </button>
+                        
+                        <button class="quick-action-btn" style="background-color: var(--info-color); color: white; border: none; border-radius: var(--border-radius); padding: 15px; text-align: left; cursor: pointer; display: flex; align-items: center;" onclick="navigateToSection('applicants')">
+                            <i class="fas fa-user-check" style="margin-right: 10px; font-size: 1.2rem;"></i>
+                            <span>View Applicants</span>
+                        </button>
+                        
+                        <button class="quick-action-btn" style="background-color: var(--success-color); color: white; border: none; border-radius: var(--border-radius); padding: 15px; text-align: left; cursor: pointer; display: flex; align-items: center;" onclick="navigateToSection('postedInternships')">
+                            <i class="fas fa-list" style="margin-right: 10px; font-size: 1.2rem;"></i>
+                            <span>Manage Internships</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Post Internship Section -->
+            <div id="postInternship-content" class="content-section">
+                <div class="content-title">Post New Internship</div>
+                <div style="max-width: 800px; margin: 0 auto;">
+                    <form id="internship-form" style="display: grid; gap: 20px;">
+                        <h3 style="margin-bottom: 20px; color: var(--text-color);">Internship Details</h3>
+                        
+                        <div style="display: flex; flex-wrap: wrap; gap: 20px; margin-bottom: 20px;">
+                            <div style="flex: 1; min-width: 250px;">
+                                <label for="internship-title" style="display: block; margin-bottom: 5px; font-size: 0.9rem; color: var(--text-light);">Internship Title*</label>
+                                <input type="text" id="internship-title" style="width: 100%; padding: 10px; border: 1px solid #e2e8f0; border-radius: var(--border-radius);" placeholder="e.g., Marketing Intern" required>
+                            </div>
+                            
+                            <div style="flex: 1; min-width: 250px;">
+                                <label for="internship-department" style="display: block; margin-bottom: 5px; font-size: 0.9rem; color: var(--text-light);">Department*</label>
+                                <input type="text" id="internship-department" style="width: 100%; padding: 10px; border: 1px solid #e2e8f0; border-radius: var(--border-radius);" placeholder="e.g., Marketing" required>
+                            </div>
+                        </div>
+                        
+                        <div style="display: flex; flex-wrap: wrap; gap: 20px; margin-bottom: 20px;">
+                            <div style="flex: 1; min-width: 250px;">
+                                <label for="internship-duration" style="display: block; margin-bottom: 5px; font-size: 0.9rem; color: var(--text-light);">Duration*</label>
+                                <select id="internship-duration" style="width: 100%; padding: 10px; border: 1px solid #e2e8f0; border-radius: var(--border-radius);" required>
+                                    <option value="">Select Duration</option>
+                                    <option value="1 month">1 Month</option>
+                                    <option value="2 months">2 Months</option>
+                                    <option value="3 months">3 Months</option>
+                                    <option value="6 months">6 Months</option>
+                                    <option value="custom">Custom Duration</option>
+                                </select>
+                            </div>
+                            
+                            <div style="flex: 1; min-width: 250px;" id="custom-duration-container" hidden>
+                                <label for="custom-duration" style="display: block; margin-bottom: 5px; font-size: 0.9rem; color: var(--text-light);">Custom Duration (weeks)*</label>
+                                <input type="number" id="custom-duration" style="width: 100%; padding: 10px; border: 1px solid #e2e8f0; border-radius: var(--border-radius);" placeholder="e.g., 8">
+                            </div>
+                            
+                            <div style="flex: 1; min-width: 250px;">
+                                <label for="internship-location" style="display: block; margin-bottom: 5px; font-size: 0.9rem; color: var(--text-light);">Location*</label>
+                                <input type="text" id="internship-location" style="width: 100%; padding: 10px; border: 1px solid #e2e8f0; border-radius: var(--border-radius);" placeholder="e.g., New York, NY" required>
+                            </div>
+                        </div>
+
+                        <div style="display: flex; flex-wrap: wrap; gap: 20px; margin-bottom: 20px;">
+                            <div style="flex: 1; min-width: 250px;">
+                                <label for="internship-type" style="display: block; margin-bottom: 5px; font-size: 0.9rem; color: var(--text-light);">Internship Type*</label>
+                                <select id="internship-type" style="width: 100%; padding: 10px; border: 1px solid #e2e8f0; border-radius: var(--border-radius);" required>
+                                    <option value="">Select Type</option>
+                                    <option value="Full-time">Full-time</option>
+                                    <option value="Part-time">Part-time</option>
+                                    <option value="Flexible">Flexible</option>
+                                </select>
+                            </div>
+                            
+                            <div style="flex: 1; min-width: 250px;">
+                                <label for="internship-work-arrangement" style="display: block; margin-bottom: 5px; font-size: 0.9rem; color: var(--text-light);">Work Arrangement*</label>
+                                <select id="internship-work-arrangement" style="width: 100%; padding: 10px; border: 1px solid #e2e8f0; border-radius: var(--border-radius);" required>
+                                    <option value="">Select Work Arrangement</option>
+                                    <option value="On-site">On-site</option>
+                                    <option value="Remote">Remote</option>
+                                    <option value="Hybrid">Hybrid</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div style="display: flex; flex-wrap: wrap; gap: 20px; margin-bottom: 20px;">
+                            <div style="flex: 1; min-width: 250px;">
+                                <label for="internship-stipend-type" style="display: block; margin-bottom: 5px; font-size: 0.9rem; color: var(--text-light);">Stipend*</label>
+                                <select id="internship-stipend-type" style="width: 100%; padding: 10px; border: 1px solid #e2e8f0; border-radius: var(--border-radius);" required>
+                                    <option value="">Select Stipend Type</option>
+                                    <option value="Paid">Paid</option>
+                                    <option value="Unpaid">Unpaid</option>
+                                    <option value="College Credit">College Credit</option>
+                                </select>
+                            </div>
+                            
+                            <div style="flex: 1; min-width: 250px;" id="stipend-amount-container" hidden>
+                                <label for="stipend-amount" style="display: block; margin-bottom: 5px; font-size: 0.9rem; color: var(--text-light);">Stipend Amount (per month)*</label>
+                                <input type="number" id="stipend-amount" style="width: 100%; padding: 10px; border: 1px solid #e2e8f0; border-radius: var(--border-radius);" placeholder="e.g., 5000">
+                            </div>
+                        </div>
+
+                        <div style="margin-bottom: 20px;">
+                            <label for="internship-start-date" style="display: block; margin-bottom: 5px; font-size: 0.9rem; color: var(--text-light);">Start Date*</label>
+                            <input type="date" id="internship-start-date" style="width: 100%; padding: 10px; border: 1px solid #e2e8f0; border-radius: var(--border-radius);" required>
+                        </div>
+
+                        <div style="margin-bottom: 20px;">
+                            <label for="internship-description" style="display: block; margin-bottom: 5px; font-size: 0.9rem; color: var(--text-light);">Internship Description*</label>
+                            <textarea id="internship-description" rows="6" style="width: 100%; padding: 10px; border: 1px solid #e2e8f0; border-radius: var(--border-radius);" placeholder="Provide a detailed description of the internship..." required></textarea>
+                        </div>
+
+                        <div style="margin-bottom: 20px;">
+                            <label for="learning-outcomes" style="display: block; margin-bottom: 5px; font-size: 0.9rem; color: var(--text-light);">Learning Outcomes*</label>
+                            <textarea id="learning-outcomes" rows="4" style="width: 100%; padding: 10px; border: 1px solid #e2e8f0; border-radius: var(--border-radius);" placeholder="List what interns will learn during this internship..." required></textarea>
+                        </div>
+
+                        <div style="margin-bottom: 20px;">
+                            <label for="internship-responsibilities" style="display: block; margin-bottom: 5px; font-size: 0.9rem; color: var(--text-light);">Responsibilities*</label>
+                            <textarea id="internship-responsibilities" rows="4" style="width: 100%; padding: 10px; border: 1px solid #e2e8f0; border-radius: var(--border-radius);" placeholder="List the key responsibilities for this internship..." required></textarea>
+                        </div>
+
+                        <div style="margin-bottom: 20px;">
+                            <label for="internship-requirements" style="display: block; margin-bottom: 5px; font-size: 0.9rem; color: var(--text-light);">Requirements*</label>
+                            <textarea id="internship-requirements" rows="4" style="width: 100%; padding: 10px; border: 1px solid #e2e8f0; border-radius: var(--border-radius);" placeholder="List the required qualifications, skills, and educational background..." required></textarea>
+                        </div>
+
+                        <div style="margin-bottom: 20px;">
+                            <label for="internship-perks" style="display: block; margin-bottom: 5px; font-size: 0.9rem; color: var(--text-light);">Perks and Benefits</label>
+                            <textarea id="internship-perks" rows="4" style="width: 100%; padding: 10px; border: 1px solid #e2e8f0; border-radius: var(--border-radius);" placeholder="List any perks or benefits offered with this internship..."></textarea>
+                        </div>
+
+                        <!-- New Fields: Skills Required -->
+                        <div style="margin-bottom: 20px;">
+                            <label for="internship-skills" style="display: block; margin-bottom: 5px; font-size: 0.9rem; color: var(--text-light);">Required Skills*</label>
+                            <input type="text" id="internship-skills" style="width: 100%; padding: 10px; border: 1px solid #e2e8f0; border-radius: var(--border-radius);" placeholder="e.g., JavaScript, Python, Communication, Project Management (comma separated)" required>
+                            <p style="margin-top: 5px; font-size: 0.8rem; color: var(--text-light);">List technical and soft skills required for this position (comma separated)</p>
+                        </div>
+
+                        <!-- Qualification Details -->
+                        <div style="margin-bottom: 20px;">
+                            <label for="internship-qualification" style="display: block; margin-bottom: 5px; font-size: 0.9rem; color: var(--text-light);">Minimum Qualification</label>
+                            <select id="internship-qualification" style="width: 100%; padding: 10px; border: 1px solid #e2e8f0; border-radius: var(--border-radius);">
+                                <option value="No specific qualification">No specific qualification</option>
+                                <option value="High School">High School</option>
+                                <option value="Bachelor's Degree">Bachelor's Degree</option>
+                                <option value="Master's Degree">Master's Degree</option>
+                                <option value="PhD">PhD</option>
+                            </select>
+                        </div>
+
+                        <!-- Priority Recruitment -->
+                        <div style="margin-bottom: 20px;">
+                            <label style="display: block; margin-bottom: 10px; font-size: 0.9rem; color: var(--text-light);">Priority Recruitment</label>
+                            <div style="display: flex; align-items: center; margin-bottom: 10px;">
+                                <input type="checkbox" id="priority-recruitment" style="margin-right: 10px;">
+                                <label for="priority-recruitment" style="font-size: 0.9rem;">Mark this as a priority recruitment opportunity</label>
+                            </div>
+                            <select id="priority-departments" style="width: 100%; padding: 10px; border: 1px solid #e2e8f0; border-radius: var(--border-radius);" multiple>
+                                <option value="Computer Science">Computer Science</option>
+                                <option value="Information Technology">Information Technology</option>
+                                <option value="Electronics">Electronics</option>
+                                <option value="Mechanical">Mechanical</option>
+                                <option value="Civil">Civil</option>
+                                <option value="Electrical">Electrical</option>
+                                <option value="Marketing">Marketing</option>
+                                <option value="Finance">Finance</option>
+                            </select>
+                            <p style="margin-top: 5px; font-size: 0.8rem; color: var(--text-light);">Hold Ctrl/Cmd to select multiple departments for priority recruitment</p>
+                        </div>
+                        
+                        <div style="margin-bottom: 20px;">
+                            <label for="application-deadline" style="display: block; margin-bottom: 5px; font-size: 0.9rem; color: var(--text-light);">Application Deadline*</label>
+                            <input type="date" id="application-deadline" style="width: 100%; padding: 10px; border: 1px solid #e2e8f0; border-radius: var(--border-radius);" required>
+                        </div>
+                        
+                        <div style="margin-top: 20px; display: flex; justify-content: flex-end;">
+                            <button type="button" id="cancel-internship-btn" style="background-color: #e2e8f0; color: var(--text-color); border: none; padding: 12px 20px; border-radius: var(--border-radius); margin-right: 15px; cursor: pointer;">Cancel</button>
+                            <button type="submit" id="post-internship-btn" style="background-color: var(--primary-color); color: white; border: none; padding: 12px 20px; border-radius: var(--border-radius); cursor: pointer;">Post Internship</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            
+            <!-- Posted Internships Section -->
+            <div id="postedInternships-content" class="content-section">
+                <div class="content-title">Posted Internships</div>
+                <!-- Search and filter options -->
+                <div class="filter-container" style="display: flex; justify-content: space-between; margin-bottom: 20px; flex-wrap: wrap; gap: 10px;">
+                    <div style="display: flex; gap: 10px; flex: 2; min-width: 300px;">
+                        <input type="text" id="internship-search" placeholder="Search internships..." style="flex: 1; padding: 10px; border: 1px solid #e2e8f0; border-radius: var(--border-radius);">
+                        <select id="internship-status-filter" style="padding: 10px; border: 1px solid #e2e8f0; border-radius: var(--border-radius);">
+                            <option value="all">All Status</option>
+                            <option value="active">Active</option>
+                            <option value="closed">Closed</option>
+                            <option value="expired">Expired</option>
+                        </select>
+                    </div>
+                    <button class="primary-btn" onclick="navigateToSection('postInternship-content')" style="display: flex; align-items: center;">
+                        <i class="fas fa-plus" style="margin-right: 8px;"></i>
+                        Post New Internship
+                    </button>
+                </div>
+                
+                <!-- Will be populated dynamically -->
+                <div id="internships-list">
+                    <!-- Empty state message shown when no internships -->
+                    <div id="empty-internships" class="empty-state" style="text-align: center; padding: 50px 20px;">
+                        <i class="fas fa-briefcase" style="font-size: 3rem; color: var(--primary-color); margin-bottom: 20px;"></i>
+                        <h3 style="color: var(--text-color); margin-bottom: 10px;">No Internships Posted Yet</h3>
+                        <p style="color: var(--text-light); max-width: 600px; margin: 0 auto 20px;">
+                            You haven't posted any internships yet. Start by creating your first internship posting.
+                        </p>
+                        <button class="post-new-btn" style="background-color: var(--primary-color); color: white; border: none; padding: 10px 20px; border-radius: var(--border-radius); cursor: pointer;" onclick="navigateToSection('postInternship-content')">
+                            Post New Internship
+                        </button>
+                    </div>
+                    
+                    <!-- Internship card template - will be cloned by JS -->
+                    <div id="internship-card-template" style="display: none; background-color: white; border-radius: var(--border-radius); margin-bottom: 20px; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05); overflow: hidden;">
+                        <div style="padding: 20px; border-bottom: 1px solid #f0f0f0;">
+                            <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 15px;">
+                                <h3 class="internship-title" style="font-size: 1.2rem; margin: 0; color: var(--text-color);"></h3>
+                                <div class="internship-status" style="padding: 5px 10px; border-radius: 20px; font-size: 0.8rem; font-weight: 500;"></div>
+                            </div>
+                            <div style="display: flex; flex-wrap: wrap; gap: 15px; margin-bottom: 15px;">
+                                <div style="display: flex; align-items: center; color: var(--text-light); font-size: 0.9rem;">
+                                    <i class="fas fa-building" style="margin-right: 5px;"></i>
+                                    <span class="internship-department"></span>
+                                </div>
+                                <div style="display: flex; align-items: center; color: var(--text-light); font-size: 0.9rem;">
+                                    <i class="fas fa-map-marker-alt" style="margin-right: 5px;"></i>
+                                    <span class="internship-location"></span>
+                                </div>
+                                <div style="display: flex; align-items: center; color: var(--text-light); font-size: 0.9rem;">
+                                    <i class="fas fa-clock" style="margin-right: 5px;"></i>
+                                    <span class="internship-duration"></span>
+                                </div>
+                                <div style="display: flex; align-items: center; color: var(--text-light); font-size: 0.9rem;">
+                                    <i class="fas fa-money-bill-wave" style="margin-right: 5px;"></i>
+                                    <span class="internship-stipend"></span>
+                                </div>
+                            </div>
+                            <div class="internship-stats" style="display: flex; gap: 20px; flex-wrap: wrap;">
+                                <div class="stat-item" style="background-color: #f8f9fa; padding: 10px 15px; border-radius: var(--border-radius); display: flex; align-items: center;">
+                                    <div style="width: 30px; height: 30px; border-radius: 50%; background-color: rgba(74, 111, 220, 0.1); color: var(--primary-color); display: flex; align-items: center; justify-content: center; margin-right: 10px;">
+                                        <i class="fas fa-users"></i>
+                                    </div>
+                                    <div>
+                                        <div class="applicant-count" style="font-weight: 600; color: var(--text-color);">0</div>
+                                        <div style="font-size: 0.8rem; color: var(--text-light);">Applicants</div>
+                                    </div>
+                                </div>
+                                <div class="stat-item" style="background-color: #f8f9fa; padding: 10px 15px; border-radius: var(--border-radius); display: flex; align-items: center;">
+                                    <div style="width: 30px; height: 30px; border-radius: 50%; background-color: rgba(72, 187, 120, 0.1); color: var(--success-color); display: flex; align-items: center; justify-content: center; margin-right: 10px;">
+                                        <i class="fas fa-calendar-alt"></i>
+                                    </div>
+                                    <div>
+                                        <div class="days-remaining" style="font-weight: 600; color: var(--text-color);">0</div>
+                                        <div style="font-size: 0.8rem; color: var(--text-light);">Days Left</div>
+                                    </div>
+                                </div>
+                                <div class="stat-item" style="background-color: #f8f9fa; padding: 10px 15px; border-radius: var(--border-radius); display: flex; align-items: center;">
+                                    <div style="width: 30px; height: 30px; border-radius: 50%; background-color: rgba(237, 137, 54, 0.1); color: var(--warning-color); display: flex; align-items: center; justify-content: center; margin-right: 10px;">
+                                        <i class="fas fa-eye"></i>
+                                    </div>
+                                    <div>
+                                        <div class="views-count" style="font-weight: 600; color: var(--text-color);">0</div>
+                                        <div style="font-size: 0.8rem; color: var(--text-light);">Views</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div style="padding: 15px 20px; background-color: #fafafa; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 10px;">
+                            <div style="display: flex; align-items: center; color: var(--text-light); font-size: 0.9rem;">
+                                <span>Posted: </span>
+                                <span class="internship-date" style="margin-left: 5px;"></span>
+                            </div>
+                            <div style="display: flex; gap: 10px;">
+                                <button class="view-applicants-btn secondary-btn" style="padding: 8px 12px; display: flex; align-items: center;">
+                                    <i class="fas fa-users" style="margin-right: 5px;"></i>
+                                    Applicants
+                                </button>
+                                <button class="edit-internship-btn secondary-btn" style="padding: 8px 12px; display: flex; align-items: center;">
+                                    <i class="fas fa-edit" style="margin-right: 5px;"></i>
+                                    Edit
+                                </button>
+                                <button class="toggle-status-btn secondary-btn" style="padding: 8px 12px; display: flex; align-items: center;">
+                                    <i class="fas fa-power-off" style="margin-right: 5px;"></i>
+                                    <span class="toggle-text">Deactivate</span>
+                                </button>
+                                <button class="delete-internship-btn secondary-btn" style="padding: 8px 12px; display: flex; align-items: center; color: var(--danger-color);">
+                                    <i class="fas fa-trash" style="margin-right: 5px;"></i>
+                                    Delete
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Actual internship list container -->
+                    <div id="actual-internships-list"></div>
+                </div>
+            </div>
+            
+            <!-- Applicants Section -->
+            <div id="applicants-content" class="content-section">
+                <div class="content-title">Applicants</div>
+                <div id="applicants-list">
+                    <div class="empty-state" style="text-align: center; padding: 50px 20px;">
+                        <i class="fas fa-users" style="font-size: 3rem; color: var(--primary-color); margin-bottom: 20px;"></i>
+                        <h3 style="color: var(--text-color); margin-bottom: 10px;">No Applicants Yet</h3>
+                        <p style="color: var(--text-light); max-width: 600px; margin: 0 auto;">
+                            You haven't received any applications for your internship postings yet. Applications will appear here once students start applying.
+                        </p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Company Profile Section -->
+            <div id="company-profile-content" class="content-section">
+                <div class="content-title">Company Profile</div>
+                <form id="company-profile-form">
+                    <div class="profile-section">
+                        <h3>Company Information</h3>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="company-name">Company Name <span class="required">*</span></label>
+                                <input type="text" id="company-name" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="company-logo">Company Logo</label>
+                                <div class="logo-upload-container">
+                                    <img id="company-logo-preview" src="https://via.placeholder.com/150x150?text=Logo" alt="Company Logo">
+                                    <input type="file" id="company-logo-upload" accept="image/*">
+                                    <label for="company-logo-upload" class="upload-btn">Choose Logo</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="industry">Industry <span class="required">*</span></label>
+                                <select id="industry" required>
+                                    <option value="">Select Industry</option>
+                                    <option value="Information Technology">Information Technology</option>
+                                    <option value="Healthcare">Healthcare</option>
+                                    <option value="Finance">Finance</option>
+                                    <option value="Education">Education</option>
+                                    <option value="Retail">Retail</option>
+                                    <option value="Manufacturing">Manufacturing</option>
+                                    <option value="Consulting">Consulting</option>
+                                    <option value="Other">Other</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="company-size">Company Size <span class="required">*</span></label>
+                                <select id="company-size" required>
+                                    <option value="">Select Company Size</option>
+                                    <option value="1-10">1-10 employees</option>
+                                    <option value="11-50">11-50 employees</option>
+                                    <option value="51-200">51-200 employees</option>
+                                    <option value="201-500">201-500 employees</option>
+                                    <option value="501-1000">501-1000 employees</option>
+                                    <option value="1001+">1001+ employees</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="company-description">Company Description <span class="required">*</span></label>
+                            <textarea id="company-description" rows="4" required></textarea>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="company-website">Company Website</label>
+                            <input type="url" id="company-website" placeholder="https://example.com">
+                        </div>
+                    </div>
+
+                    <div class="profile-section">
+                        <h3>Contact Information</h3>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="contact-person">Contact Person Name <span class="required">*</span></label>
+                                <input type="text" id="contact-person" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="contact-position">Position <span class="required">*</span></label>
+                                <input type="text" id="contact-position" required>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="contact-email">Contact Email <span class="required">*</span></label>
+                                <input type="email" id="contact-email" disabled>
+                            </div>
+                            <div class="form-group">
+                                <label for="contact-phone">Phone Number <span class="required">*</span></label>
+                                <input type="tel" id="contact-phone" required>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="company-address">Company Address <span class="required">*</span></label>
+                            <textarea id="company-address" rows="3" required></textarea>
+                        </div>
+                    </div>
+
+                    <div class="profile-section">
+                        <h3>Social Media</h3>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="linkedin">LinkedIn</label>
+                                <input type="url" id="linkedin" placeholder="https://linkedin.com/company/example">
+                            </div>
+                            <div class="form-group">
+                                <label for="twitter">Twitter/X</label>
+                                <input type="url" id="twitter" placeholder="https://twitter.com/example">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="facebook">Facebook</label>
+                                <input type="url" id="facebook" placeholder="https://facebook.com/example">
+                            </div>
+                            <div class="form-group">
+                                <label for="instagram">Instagram</label>
+                                <input type="url" id="instagram" placeholder="https://instagram.com/example">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="youtube">YouTube</label>
+                                <input type="url" id="youtube" placeholder="https://youtube.com/c/example">
+                            </div>
+                            <div class="form-group">
+                                <label for="github">GitHub</label>
+                                <input type="url" id="github" placeholder="https://github.com/example">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="profile-section">
+                        <h3>Company Culture</h3>
+                        <div class="form-group">
+                            <label for="company-mission">Mission & Vision <span class="required">*</span></label>
+                            <textarea id="company-mission" rows="3" placeholder="Describe your company's mission and vision..."></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="company-values">Core Values <span class="required">*</span></label>
+                            <textarea id="company-values" rows="3" placeholder="List your company's core values..."></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="work-environment">Work Environment</label>
+                            <textarea id="work-environment" rows="3" placeholder="Describe your work culture, environment, and employee perks..."></textarea>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="diversity-inclusion">Diversity & Inclusion Initiatives</label>
+                                <textarea id="diversity-inclusion" rows="3" placeholder="Describe your company's diversity and inclusion initiatives..."></textarea>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="profile-section">
+                        <h3>Company Achievements</h3>
+                        <div class="form-group">
+                            <label for="company-awards">Awards & Recognition</label>
+                            <textarea id="company-awards" rows="3" placeholder="List any awards or recognition your company has received..."></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="notable-projects">Notable Projects</label>
+                            <textarea id="notable-projects" rows="3" placeholder="Describe any notable projects or milestones..."></textarea>
+                        </div>
+                    </div>
+
+                    <div class="profile-section">
+                        <h3>Campus Recruitment Preferences</h3>
+                        <div class="form-group">
+                            <label for="target-colleges">Target Colleges/Universities</label>
+                            <input type="text" id="target-colleges" placeholder="e.g., MIT, Stanford, Harvard (comma separated)">
+                            <p style="margin-top: 5px; font-size: 0.8rem; color: var(--text-light);">List colleges where you prefer to recruit from (comma separated)</p>
+                        </div>
+                        <div class="form-group">
+                            <label for="preferred-degrees">Preferred Degrees/Majors</label>
+                            <input type="text" id="preferred-degrees" placeholder="e.g., Computer Science, Engineering, Business (comma separated)">
+                        </div>
+                        <div class="form-group">
+                            <label>Recruitment Events Participation</label>
+                            <div style="display: flex; flex-wrap: wrap; gap: 15px; margin-top: 10px;">
+                                <div style="display: flex; align-items: center;">
+                                    <input type="checkbox" id="career-fairs" style="margin-right: 8px;">
+                                    <label for="career-fairs" style="font-weight: normal;">Career Fairs</label>
+                                </div>
+                                <div style="display: flex; align-items: center;">
+                                    <input type="checkbox" id="workshops" style="margin-right: 8px;">
+                                    <label for="workshops" style="font-weight: normal;">Workshops</label>
+                                </div>
+                                <div style="display: flex; align-items: center;">
+                                    <input type="checkbox" id="guest-lectures" style="margin-right: 8px;">
+                                    <label for="guest-lectures" style="font-weight: normal;">Guest Lectures</label>
+                                </div>
+                                <div style="display: flex; align-items: center;">
+                                    <input type="checkbox" id="hackathons" style="margin-right: 8px;">
+                                    <label for="hackathons" style="font-weight: normal;">Hackathons</label>
+                                </div>
+                                <div style="display: flex; align-items: center;">
+                                    <input type="checkbox" id="webinars" style="margin-right: 8px;">
+                                    <label for="webinars" style="font-weight: normal;">Webinars</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="internship-conversion">Internship to Full-time Conversion Policy</label>
+                            <select id="internship-conversion">
+                                <option value="">Select Policy</option>
+                                <option value="Regular conversion">Regular conversion based on performance</option>
+                                <option value="Guaranteed conversion">Guaranteed conversion for top performers</option>
+                                <option value="Case by case">Case by case basis</option>
+                                <option value="No conversion">No conversion policy</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-buttons">
+                        <button type="submit" class="primary-btn">Save Profile</button>
+                        <button type="button" id="cancel-profile-btn" class="secondary-btn">Cancel</button>
+                    </div>
+                </form>
+            </div>
+            
+            <!-- Settings Section -->
+            <div id="settings-content" class="content-section">
+                <div class="content-title">Settings</div>
+                
+                <div class="profile-section">
+                    <h3>Notification Preferences</h3>
+                    <div class="form-group">
+                        <label>Email Notifications</label>
+                        <div style="display: flex; flex-wrap: wrap; gap: 15px; margin-top: 10px;">
+                            <div style="display: flex; align-items: center;">
+                                <input type="checkbox" id="notify-applications" checked style="margin-right: 8px;">
+                                <label for="notify-applications" style="font-weight: normal;">New Applications</label>
+                            </div>
+                            <div style="display: flex; align-items: center;">
+                                <input type="checkbox" id="notify-messages" checked style="margin-right: 8px;">
+                                <label for="notify-messages" style="font-weight: normal;">Messages from Students</label>
+                            </div>
+                            <div style="display: flex; align-items: center;">
+                                <input type="checkbox" id="notify-updates" checked style="margin-right: 8px;">
+                                <label for="notify-updates" style="font-weight: normal;">Platform Updates</label>
+                            </div>
+                            <div style="display: flex; align-items: center;">
+                                <input type="checkbox" id="notify-reminders" checked style="margin-right: 8px;">
+                                <label for="notify-reminders" style="font-weight: normal;">Deadline Reminders</label>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="notification-frequency">Email Digest Frequency</label>
+                        <select id="notification-frequency">
+                            <option value="immediate">Immediate (As they happen)</option>
+                            <option value="daily">Daily Summary</option>
+                            <option value="weekly">Weekly Summary</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="profile-section">
+                    <h3>Privacy Settings</h3>
+                    <div class="form-group">
+                        <label>Company Profile Visibility</label>
+                        <div style="display: flex; flex-wrap: wrap; gap: 15px; margin-top: 10px;">
+                            <div style="display: flex; align-items: center;">
+                                <input type="radio" name="profile-visibility" id="visibility-public" value="public" checked style="margin-right: 8px;">
+                                <label for="visibility-public" style="font-weight: normal;">Public (Visible to all students)</label>
+                            </div>
+                            <div style="display: flex; align-items: center;">
+                                <input type="radio" name="profile-visibility" id="visibility-verified" value="verified" style="margin-right: 8px;">
+                                <label for="visibility-verified" style="font-weight: normal;">Verified Users Only</label>
+                            </div>
+                            <div style="display: flex; align-items: center;">
+                                <input type="radio" name="profile-visibility" id="visibility-applicants" value="applicants" style="margin-right: 8px;">
+                                <label for="visibility-applicants" style="font-weight: normal;">Only Visible to Applicants</label>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Contact Information Visibility</label>
+                        <div style="display: flex; flex-wrap: wrap; gap: 15px; margin-top: 10px;">
+                            <div style="display: flex; align-items: center;">
+                                <input type="checkbox" id="show-email" checked style="margin-right: 8px;">
+                                <label for="show-email" style="font-weight: normal;">Show Email Address</label>
+                            </div>
+                            <div style="display: flex; align-items: center;">
+                                <input type="checkbox" id="show-phone" style="margin-right: 8px;">
+                                <label for="show-phone" style="font-weight: normal;">Show Phone Number</label>
+                            </div>
+                            <div style="display: flex; align-items: center;">
+                                <input type="checkbox" id="show-contact-person" checked style="margin-right: 8px;">
+                                <label for="show-contact-person" style="font-weight: normal;">Show Contact Person</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="profile-section">
+                    <h3>Data Management</h3>
+                    <div class="form-group">
+                        <label>Export Your Data</label>
+                        <p style="margin: 10px 0; color: var(--text-light); font-size: 0.9rem;">
+                            Download a copy of all your data, including profile information, posted internships, and applicant data.
+                        </p>
+                        <button id="export-data-btn" class="secondary-btn" style="margin-top: 10px;">
+                            <i class="fas fa-download" style="margin-right: 8px;"></i> Export Data
+                        </button>
+                    </div>
+                    
+                    <div class="form-group" style="margin-top: 20px;">
+                        <label>Data Retention</label>
+                        <p style="margin: 10px 0; color: var(--text-light); font-size: 0.9rem;">
+                            Choose how long to keep applicant data after internship completion
+                        </p>
+                        <select id="data-retention">
+                            <option value="6months">6 Months</option>
+                            <option value="1year" selected>1 Year</option>
+                            <option value="2years">2 Years</option>
+                            <option value="forever">Indefinitely</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="profile-section">
+                    <h3>Security</h3>
+                    <div class="form-group">
+                        <label for="current-password">Current Password</label>
+                        <input type="password" id="current-password">
+                    </div>
+                    <div class="form-group">
+                        <label for="new-password">New Password</label>
+                        <input type="password" id="new-password">
+                    </div>
+                    <div class="form-group">
+                        <label for="confirm-password">Confirm New Password</label>
+                        <input type="password" id="confirm-password">
+                    </div>
+                    <button id="change-password-btn" class="primary-btn" style="margin-top: 10px;">
+                        Change Password
+                    </button>
+                </div>
+                
+                <div class="profile-section" style="border: 1px solid #fee2e2; background-color: #fff5f5;">
+                    <h3 style="color: var(--danger-color);">Delete Account</h3>
+                    <p style="margin: 10px 0; color: var(--text-light); font-size: 0.9rem;">
+                        Permanently delete your account and all associated data. This action cannot be undone.
+                    </p>
+                    <div class="form-group">
+                        <div style="display: flex; align-items: center; margin: 15px 0;">
+                            <input type="checkbox" id="delete-confirm" style="margin-right: 8px;">
+                            <label for="delete-confirm" style="font-weight: normal;">I understand that this action is permanent and cannot be undone.</label>
+                        </div>
+                    </div>
+                    <button id="delete-account-btn" class="secondary-btn" style="background-color: var(--danger-color); color: white; opacity: 0.6; cursor: not-allowed;">
+                        Delete Account
+                    </button>
+                </div>
+                
+                <div style="margin-top: 20px; display: flex; justify-content: flex-end;">
+                    <button id="save-settings-btn" class="primary-btn">Save Settings</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // When DOM is loaded
+        document.addEventListener('DOMContentLoaded', function() {
+            // Check if user is logged in and get company data
+            checkAuthStatus();
+            
+            // Load company profile data
+            loadCompanyProfile();
+            
+            // Set up navigation menu
+            setupNavigation();
+            
+            // Handle logout button
+            document.getElementById('logout-btn').addEventListener('click', function(e) {
+                e.preventDefault();
+                localStorage.removeItem('isLoggedIn');
+                localStorage.removeItem('currentUserEmail');
+                window.location.href = 'login.html';
+            });
+            
+            // Toggle sidebar on mobile
+            document.querySelector('.hamburger').addEventListener('click', function() {
+                document.querySelector('.sidebar').classList.toggle('active');
+            });
+            
+            // Set up internship form behaviors
+            setupInternshipForm();
+            
+            // Set up company profile form
+            setupCompanyProfileForm();
+            
+            // Set up settings page functionality
+            setupSettingsPage();
+            
+            // Set up posted internships functionality
+            setupPostedInternshipsPage();
+            
+            // Update profile completion status
+            updateProfileCompletion();
+            
+            // Display posted internships
+            displayPostedInternships();
+            
+            // Load applicants
+            loadApplicants();
+        });
+        
+        // Check authentication status
+        function checkAuthStatus() {
+            const isLoggedIn = localStorage.getItem('isLoggedIn');
+            const currentUserEmail = localStorage.getItem('currentUserEmail');
+            
+            // Redirect to login if not logged in
+            if (isLoggedIn !== 'true' || !currentUserEmail) {
+                window.location.href = 'login.html';
+                return;
+            }
+            
+            // Get users from localStorage
+            const users = JSON.parse(localStorage.getItem('campusConnectUsers')) || {};
+            
+            // Check if user exists and is a company
+            if (!users[currentUserEmail] || users[currentUserEmail].userType !== 'company') {
+                alert('You do not have permission to access the company dashboard');
+                window.location.href = 'login.html';
+                return;
+            }
+            
+            // Update user info in the sidebar
+            document.getElementById('contact-email').value = currentUserEmail;
+            const companyName = users[currentUserEmail].companyName;
+            if (companyName) {
+                document.querySelector('.user-name').textContent = companyName;
+            }
+        }
+        
+        // Load company profile data
+        function loadCompanyProfile() {
+            const currentUserEmail = localStorage.getItem('currentUserEmail');
+            if (!currentUserEmail) return;
+            
+            // Get company data from localStorage
+            const users = JSON.parse(localStorage.getItem('campusConnectUsers')) || {};
+            const companyData = users[currentUserEmail] || {};
+            
+            // Populate form fields with company data
+            document.getElementById('company-name').value = companyData.companyName || '';
+            document.getElementById('industry').value = companyData.industry || '';
+            document.getElementById('company-size').value = companyData.companySize || '';
+            document.getElementById('company-description').value = companyData.companyDescription || '';
+            document.getElementById('company-website').value = companyData.companyWebsite || '';
+            document.getElementById('contact-person').value = companyData.contactPerson || '';
+            document.getElementById('contact-position').value = companyData.contactPosition || '';
+            document.getElementById('contact-email').value = currentUserEmail;
+            document.getElementById('contact-phone').value = companyData.contactPhone || '';
+            document.getElementById('company-address').value = companyData.companyAddress || '';
+            document.getElementById('linkedin').value = companyData.linkedin || '';
+            document.getElementById('twitter').value = companyData.twitter || '';
+            document.getElementById('facebook').value = companyData.facebook || '';
+            document.getElementById('instagram').value = companyData.instagram || '';
+            document.getElementById('youtube').value = companyData.youtube || '';
+            document.getElementById('github').value = companyData.github || '';
+            
+            // Load company culture data
+            document.getElementById('company-mission').value = companyData.companyMission || '';
+            document.getElementById('company-values').value = companyData.companyValues || '';
+            document.getElementById('work-environment').value = companyData.workEnvironment || '';
+            document.getElementById('diversity-inclusion').value = companyData.diversityInclusion || '';
+            
+            // Load company achievements
+            document.getElementById('company-awards').value = companyData.companyAwards || '';
+            document.getElementById('notable-projects').value = companyData.notableProjects || '';
+            
+            // Load campus recruitment preferences
+            document.getElementById('target-colleges').value = companyData.targetColleges || '';
+            document.getElementById('preferred-degrees').value = companyData.preferredDegrees || '';
+            document.getElementById('internship-conversion').value = companyData.internshipConversion || '';
+            
+            // Load recruitment events
+            if (companyData.recruitmentEvents) {
+                document.getElementById('career-fairs').checked = companyData.recruitmentEvents.careerFairs || false;
+                document.getElementById('workshops').checked = companyData.recruitmentEvents.workshops || false;
+                document.getElementById('guest-lectures').checked = companyData.recruitmentEvents.guestLectures || false;
+                document.getElementById('hackathons').checked = companyData.recruitmentEvents.hackathons || false;
+                document.getElementById('webinars').checked = companyData.recruitmentEvents.webinars || false;
+            }
+            
+            // Update logo preview if available
+            if (companyData.companyLogo) {
+                document.getElementById('company-logo-preview').src = companyData.companyLogo;
+                document.getElementById('sidebar-profile-image').src = companyData.companyLogo;
+            }
+            
+            // Update sidebar company name
+            if (companyData.companyName) {
+                document.querySelector('.user-name').textContent = companyData.companyName;
+            }
+        }
+        
+        // Set up company profile form
+        function setupCompanyProfileForm() {
+            // Handle logo upload
+            document.getElementById('company-logo-upload').addEventListener('change', function(event) {
+                const file = event.target.files[0];
+                if (file && file.type.match('image.*')) {
+                    const reader = new FileReader();
+                    
+                    reader.onload = function(e) {
+                        const logoPreview = document.getElementById('company-logo-preview');
+                        logoPreview.src = e.target.result;
+                        
+                        // Also update sidebar logo
+                        document.getElementById('sidebar-profile-image').src = e.target.result;
+                    };
+                    
+                    reader.readAsDataURL(file);
+                }
+            });
+            
+            // Handle form submission
+            document.getElementById('company-profile-form').addEventListener('submit', function(e) {
+                e.preventDefault();
+                saveCompanyProfile();
+            });
+            
+            // Handle cancel button
+            document.getElementById('cancel-profile-btn').addEventListener('click', function() {
+                navigateToSection('dashboard-content');
+            });
+        }
+        
+        // Save company profile data
+        function saveCompanyProfile() {
+            const currentUserEmail = localStorage.getItem('currentUserEmail');
+            if (!currentUserEmail) return;
+            
+            // Get form values
+            const companyName = document.getElementById('company-name').value;
+            const industry = document.getElementById('industry').value;
+            const companySize = document.getElementById('company-size').value;
+            const companyDescription = document.getElementById('company-description').value;
+            const companyWebsite = document.getElementById('company-website').value;
+            const contactPerson = document.getElementById('contact-person').value;
+            const contactPosition = document.getElementById('contact-position').value;
+            const contactPhone = document.getElementById('contact-phone').value;
+            const companyAddress = document.getElementById('company-address').value;
+            const linkedin = document.getElementById('linkedin').value;
+            const twitter = document.getElementById('twitter').value;
+            const facebook = document.getElementById('facebook').value;
+            const instagram = document.getElementById('instagram').value;
+            const youtube = document.getElementById('youtube').value;
+            const github = document.getElementById('github').value;
+            const companyLogo = document.getElementById('company-logo-preview').src;
+            
+            // Company culture values
+            const companyMission = document.getElementById('company-mission').value;
+            const companyValues = document.getElementById('company-values').value;
+            const workEnvironment = document.getElementById('work-environment').value;
+            const diversityInclusion = document.getElementById('diversity-inclusion').value;
+            
+            // Company achievements
+            const companyAwards = document.getElementById('company-awards').value;
+            const notableProjects = document.getElementById('notable-projects').value;
+            
+            // Campus recruitment preferences
+            const targetColleges = document.getElementById('target-colleges').value;
+            const preferredDegrees = document.getElementById('preferred-degrees').value;
+            const careerFairs = document.getElementById('career-fairs').checked;
+            const workshops = document.getElementById('workshops').checked;
+            const guestLectures = document.getElementById('guest-lectures').checked;
+            const hackathons = document.getElementById('hackathons').checked;
+            const webinars = document.getElementById('webinars').checked;
+            const internshipConversion = document.getElementById('internship-conversion').value;
+            
+            // Validate required fields
+            if (!companyName || !industry || !companySize || !companyDescription || 
+                !contactPerson || !contactPosition || !contactPhone || !companyAddress) {
+                alert('Please fill in all required fields');
+                return;
+            }
+            
+            // Get users data from localStorage
+            const users = JSON.parse(localStorage.getItem('campusConnectUsers')) || {};
+            
+            // Create or update user data
+            if (!users[currentUserEmail]) {
+                users[currentUserEmail] = {
+                    email: currentUserEmail,
+                    userType: 'company'
+                };
+            }
+            
+            // Update company data
+            users[currentUserEmail].companyName = companyName;
+            users[currentUserEmail].industry = industry;
+            users[currentUserEmail].companySize = companySize;
+            users[currentUserEmail].companyDescription = companyDescription;
+            users[currentUserEmail].companyWebsite = companyWebsite;
+            users[currentUserEmail].contactPerson = contactPerson;
+            users[currentUserEmail].contactPosition = contactPosition;
+            users[currentUserEmail].contactPhone = contactPhone;
+            users[currentUserEmail].companyAddress = companyAddress;
+            users[currentUserEmail].linkedin = linkedin;
+            users[currentUserEmail].twitter = twitter;
+            users[currentUserEmail].facebook = facebook;
+            users[currentUserEmail].instagram = instagram;
+            users[currentUserEmail].youtube = youtube;
+            users[currentUserEmail].github = github;
+            users[currentUserEmail].companyLogo = companyLogo;
+            
+            // Update company culture data
+            users[currentUserEmail].companyMission = companyMission;
+            users[currentUserEmail].companyValues = companyValues;
+            users[currentUserEmail].workEnvironment = workEnvironment;
+            users[currentUserEmail].diversityInclusion = diversityInclusion;
+            
+            // Update company achievements
+            users[currentUserEmail].companyAwards = companyAwards;
+            users[currentUserEmail].notableProjects = notableProjects;
+            
+            // Update campus recruitment preferences
+            users[currentUserEmail].targetColleges = targetColleges;
+            users[currentUserEmail].preferredDegrees = preferredDegrees;
+            users[currentUserEmail].recruitmentEvents = {
+                careerFairs,
+                workshops,
+                guestLectures,
+                hackathons,
+                webinars
+            };
+            users[currentUserEmail].internshipConversion = internshipConversion;
+            
+            // Save to localStorage
+            localStorage.setItem('campusConnectUsers', JSON.stringify(users));
+            
+            // Update sidebar company name
+            document.querySelector('.user-name').textContent = companyName;
+            
+            // Update profile completion
+            updateProfileCompletion();
+            
+            // Show success message
+            alert('Company profile updated successfully!');
+            
+            // Navigate to dashboard
+            navigateToSection('dashboard-content');
+        }
+        
+        // Update profile completion percentage
+        function updateProfileCompletion() {
+            const currentUserEmail = localStorage.getItem('currentUserEmail');
+            if (!currentUserEmail) return;
+            
+            // Get company data from localStorage
+            const users = JSON.parse(localStorage.getItem('campusConnectUsers')) || {};
+            const companyData = users[currentUserEmail] || {};
+            
+            // Fields to check for completion
+            const fields = [
+                'companyName',
+                'industry',
+                'companySize',
+                'companyDescription',
+                'companyWebsite',
+                'contactPerson',
+                'contactPosition',
+                'contactPhone',
+                'companyAddress',
+                'linkedin',
+                'twitter',
+                'facebook',
+                'instagram',
+                'youtube',
+                'github',
+                'companyLogo',
+                'companyMission',
+                'companyValues',
+                'workEnvironment',
+                'diversityInclusion',
+                'companyAwards',
+                'notableProjects',
+                'targetColleges',
+                'preferredDegrees',
+                'internshipConversion'
+            ];
+            
+            // Count filled fields
+            let filledFields = 0;
+            fields.forEach(field => {
+                if (companyData[field]) {
+                    filledFields++;
+                }
+            });
+            
+            // Also check for recruitment events
+            if (companyData.recruitmentEvents) {
+                const eventsSelected = Object.values(companyData.recruitmentEvents).filter(val => val === true).length;
+                if (eventsSelected > 0) {
+                    filledFields++;
+                }
+            }
+            
+            // Calculate percentage
+            const completionPercentage = Math.round((filledFields / (fields.length + 1)) * 100);
+            
+            // Update progress bar and text
+            const progressElement = document.querySelector('.profile-completion .progress');
+            if (progressElement) {
+                progressElement.style.width = `${completionPercentage}%`;
+            }
+            
+            const percentageElement = document.querySelector('.profile-completion .completion-percentage');
+            if (percentageElement) {
+                percentageElement.textContent = `${completionPercentage}%`;
+            }
+        }
+        
+        // Function to set up navigation
+        function setupNavigation() {
+            const menuItems = document.querySelectorAll('.menu-item');
+            const contentSections = document.querySelectorAll('.content-section');
+            
+            menuItems.forEach(item => {
+                item.addEventListener('click', function() {
+                    const contentId = this.getAttribute('data-content');
+                    
+                    // Remove active class from all menu items
+                    menuItems.forEach(mi => mi.classList.remove('active'));
+                    // Add active class to clicked menu item
+                    this.classList.add('active');
+                    
+                    // Hide all content sections
+                    contentSections.forEach(section => {
+                        section.style.display = 'none';
+                    });
+                    
+                    // Show the clicked content section
+                    document.getElementById(contentId).style.display = 'block';
+                    
+                    // Load specific content based on the section
+                    if (contentId === 'applicants-content') {
+                        loadApplicants();
+                    }
+                });
+            });
+            
+            // Function to navigate to a specific section
+            window.navigateToSection = function(contentId) {
+                // Find menu item with matching data-content attribute
+                const menuItem = document.querySelector(`.menu-item[data-content="${contentId}"]`);
+                if (menuItem) {
+                    menuItem.click();
+                }
+            };
+        }
+        
+        // Function to set up internship form behaviors
+        function setupInternshipForm() {
+            // Show/hide custom duration container based on selection
+            const durationSelect = document.getElementById('internship-duration');
+            if (durationSelect) {
+                durationSelect.addEventListener('change', function() {
+                    const customDurationContainer = document.getElementById('custom-duration-container');
+                    if (this.value === 'custom') {
+                        customDurationContainer.hidden = false;
+                    } else {
+                        customDurationContainer.hidden = true;
+                    }
+                });
+            }
+            
+            // Show/hide stipend amount container based on selection
+            const stipendTypeSelect = document.getElementById('internship-stipend-type');
+            if (stipendTypeSelect) {
+                stipendTypeSelect.addEventListener('change', function() {
+                    const stipendAmountContainer = document.getElementById('stipend-amount-container');
+                    if (this.value === 'Paid') {
+                        stipendAmountContainer.hidden = false;
+                    } else {
+                        stipendAmountContainer.hidden = true;
+                    }
+                });
+            }
+            
+            // Handle form submission
+            const internshipForm = document.getElementById('internship-form');
+            if (internshipForm) {
+                internshipForm.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    postInternship();
+                });
+            }
+            
+            // Handle cancel button
+            const cancelBtn = document.getElementById('cancel-internship-btn');
+            if (cancelBtn) {
+                cancelBtn.addEventListener('click', function() {
+                    navigateToSection('dashboard-content');
+                });
+            }
+        }
+        
+        // Function to post internship
+        function postInternship() {
+            // Check if we're editing an existing internship
+            const editingId = document.getElementById('editing-internship-id')?.value;
+            
+            // Get form values
+            const title = document.getElementById('internship-title').value;
+            const department = document.getElementById('internship-department').value;
+            let duration = document.getElementById('internship-duration').value;
+            if (duration === 'custom') {
+                const customDuration = document.getElementById('custom-duration').value;
+                duration = `${customDuration} weeks`;
+            }
+            const location = document.getElementById('internship-location').value;
+            const type = document.getElementById('internship-type').value;
+            const workArrangement = document.getElementById('internship-work-arrangement').value;
+            const stipendType = document.getElementById('internship-stipend-type').value;
+            let stipend = stipendType;
+            if (stipendType === 'Paid') {
+                const stipendAmount = document.getElementById('stipend-amount').value;
+                stipend = `₹${stipendAmount}/month`;
+            }
+            const startDate = document.getElementById('internship-start-date').value;
+            const description = document.getElementById('internship-description').value;
+            const learningOutcomes = document.getElementById('learning-outcomes').value;
+            const responsibilities = document.getElementById('internship-responsibilities').value;
+            const requirements = document.getElementById('internship-requirements').value.split('\n').filter(line => line.trim());
+            const perks = document.getElementById('internship-perks').value || '';
+            const applicationDeadline = document.getElementById('application-deadline').value;
+            const skills = document.getElementById('internship-skills').value;
+            const qualification = document.getElementById('internship-qualification').value || 'No specific qualification';
+            const companyEmail = localStorage.getItem('currentUserEmail');
+            
+            // Get company details for the companyName
+            const users = JSON.parse(localStorage.getItem('campusConnectUsers')) || {};
+            const company = users[companyEmail] || {};
+            const companyName = company.companyName || `${company.firstName || ''} ${company.lastName || ''}`.trim();
+            
+            if (editingId) {
+                // Editing existing internship
+                // Get the existing internship
+                const allInternships = JSON.parse(localStorage.getItem('campusConnectInternships')) || [];
+                const existingInternship = allInternships.find(item => item.id === editingId);
+                
+                if (!existingInternship) {
+                    alert('Internship not found');
+                    return;
+                }
+                
+                // Create updated internship object
+                const updatedInternship = {
+                    ...existingInternship,
+                    title,
+                    department,
+                    duration,
+                    location,
+                    type,
+                    workArrangement,
+                    stipend,
+                    startDate,
+                    description,
+                    learningOutcomes,
+                    responsibilities,
+                    requirements,
+                    perks,
+                    applicationDeadline,
+                    skills: skills.split(',').map(skill => skill.trim()),
+                    qualification,
+                    lastUpdated: new Date().toISOString(),
+                    companyName
+                };
+                
+                // Remove from array
+                const updatedInternships = allInternships.filter(item => item.id !== editingId);
+                
+                // Use the saveInternship function from internships.js
+                window.saveInternship(updatedInternship);
+                
+                // Reset form
+                document.getElementById('internship-form').reset();
+                document.getElementById('editing-internship-id').value = '';
+                document.getElementById('post-internship-btn').textContent = 'Post Internship';
+                
+                // Show success message
+                alert('Internship updated successfully!');
+            } else {
+                // Creating new internship
+                const internship = {
+                    id: 'internship_' + Date.now(),
+                    title,
+                    department,
+                    duration,
+                    location,
+                    type,
+                    workArrangement,
+                    stipend,
+                    startDate,
+                    description,
+                    learningOutcomes,
+                    responsibilities,
+                    requirements,
+                    perks,
+                    applicationDeadline,
+                    skills: skills.split(',').map(skill => skill.trim()),
+                    qualification,
+                    postedDate: new Date().toISOString(),
+                    companyEmail,
+                    companyName,
+                    status: 'active',
+                    applicants: [],
+                    views: 0
+                };
+                
+                // Use the saveInternship function from internships.js
+                window.saveInternship(internship);
+                
+                // Reset form
+                document.getElementById('internship-form').reset();
+                
+                // Show success message
+                alert('Internship posted successfully!');
+            }
+            
+            // Navigate to posted internships
+            navigateToSection('postedInternships-content');
+            
+            // Refresh the internships list
+            displayPostedInternships();
+        }
+        
+        // Function to set up settings page functionality
+        function setupSettingsPage() {
+            // Handle delete account checkbox
+            const deleteConfirmCheckbox = document.getElementById('delete-confirm');
+            const deleteAccountBtn = document.getElementById('delete-account-btn');
+            
+            if (deleteConfirmCheckbox && deleteAccountBtn) {
+                deleteConfirmCheckbox.addEventListener('change', function() {
+                    if (this.checked) {
+                        deleteAccountBtn.style.opacity = '1';
+                        deleteAccountBtn.style.cursor = 'pointer';
+                    } else {
+                        deleteAccountBtn.style.opacity = '0.6';
+                        deleteAccountBtn.style.cursor = 'not-allowed';
+                    }
+                });
+                
+                // Handle delete account button click
+                deleteAccountBtn.addEventListener('click', function() {
+                    if (deleteConfirmCheckbox.checked) {
+                        deleteAccount();
+                    } else {
+                        alert('Please confirm that you understand the consequences of account deletion.');
+                    }
+                });
+            }
+            
+            // Handle password change
+            const changePasswordBtn = document.getElementById('change-password-btn');
+            if (changePasswordBtn) {
+                changePasswordBtn.addEventListener('click', function() {
+                    changePassword();
+                });
+            }
+            
+            // Handle data export
+            const exportDataBtn = document.getElementById('export-data-btn');
+            if (exportDataBtn) {
+                exportDataBtn.addEventListener('click', function() {
+                    exportUserData();
+                });
+            }
+            
+            // Handle settings save
+            const saveSettingsBtn = document.getElementById('save-settings-btn');
+            if (saveSettingsBtn) {
+                saveSettingsBtn.addEventListener('click', function() {
+                    saveSettings();
+                });
+            }
+            
+            // Load saved settings
+            loadSettings();
+        }
+        
+        // Function to delete account
+        function deleteAccount() {
+            const currentUserEmail = localStorage.getItem('currentUserEmail');
+            if (!currentUserEmail) return;
+            
+            // Ask for confirmation
+            const confirmDelete = confirm(
+                'Are you absolutely sure you want to delete your account? ' +
+                'This will permanently delete your profile, internship postings, and all associated data. ' +
+                'This action CANNOT be undone.'
+            );
+            
+            if (confirmDelete) {
+                // Get users data
+                const users = JSON.parse(localStorage.getItem('campusConnectUsers')) || {};
+                
+                // Delete user
+                if (users[currentUserEmail]) {
+                    delete users[currentUserEmail];
+                    localStorage.setItem('campusConnectUsers', JSON.stringify(users));
+                }
+                
+                // Get internships
+                const internships = JSON.parse(localStorage.getItem('campusConnectInternships')) || [];
+                
+                // Filter out internships posted by this company
+                const filteredInternships = internships.filter(internship => internship.companyEmail !== currentUserEmail);
+                localStorage.setItem('campusConnectInternships', JSON.stringify(filteredInternships));
+                
+                // Clear login status
+                localStorage.removeItem('isLoggedIn');
+                localStorage.removeItem('currentUserEmail');
+                
+                // Redirect to homepage with message
+                alert('Your account has been successfully deleted. We\'re sorry to see you go!');
+                window.location.href = 'index.html';
+            }
+        }
+        
+        // Function to change password
+        function changePassword() {
+            const currentUserEmail = localStorage.getItem('currentUserEmail');
+            if (!currentUserEmail) return;
+            
+            const currentPassword = document.getElementById('current-password').value;
+            const newPassword = document.getElementById('new-password').value;
+            const confirmPassword = document.getElementById('confirm-password').value;
+            
+            // Basic validation
+            if (!currentPassword || !newPassword || !confirmPassword) {
+                alert('Please fill in all password fields.');
+                return;
+            }
+            
+            if (newPassword !== confirmPassword) {
+                alert('New passwords do not match.');
+                return;
+            }
+            
+            if (newPassword.length < 6) {
+                alert('New password must be at least 6 characters long.');
+                return;
+            }
+            
+            // Get users data
+            const users = JSON.parse(localStorage.getItem('campusConnectUsers')) || {};
+            
+            // Check if current password is correct
+            if (users[currentUserEmail] && users[currentUserEmail].password !== currentPassword) {
+                alert('Current password is incorrect.');
+                return;
+            }
+            
+            // Update password
+            if (users[currentUserEmail]) {
+                users[currentUserEmail].password = newPassword;
+                localStorage.setItem('campusConnectUsers', JSON.stringify(users));
+                
+                // Clear password fields
+                document.getElementById('current-password').value = '';
+                document.getElementById('new-password').value = '';
+                document.getElementById('confirm-password').value = '';
+                
+                alert('Password changed successfully!');
+            }
+        }
+        
+        // Function to export user data
+        function exportUserData() {
+            const currentUserEmail = localStorage.getItem('currentUserEmail');
+            if (!currentUserEmail) return;
+            
+            // Get user data
+            const users = JSON.parse(localStorage.getItem('campusConnectUsers')) || {};
+            const userData = users[currentUserEmail] || {};
+            
+            // Get internships posted by this company
+            const internships = JSON.parse(localStorage.getItem('campusConnectInternships')) || [];
+            const companyInternships = internships.filter(internship => internship.companyEmail === currentUserEmail);
+            
+            // Create export object
+            const exportData = {
+                profile: userData,
+                internships: companyInternships,
+                exportDate: new Date().toISOString()
+            };
+            
+            // Convert to JSON string
+            const dataStr = JSON.stringify(exportData, null, 2);
+            
+            // Create download link
+            const dataUri = 'data:application/json;charset=utf-8,' + encodeURIComponent(dataStr);
+            const exportFileDefaultName = 'campus_connect_company_data.json';
+            
+            // Create temporary link and trigger download
+            const linkElement = document.createElement('a');
+            linkElement.setAttribute('href', dataUri);
+            linkElement.setAttribute('download', exportFileDefaultName);
+            linkElement.click();
+        }
+        
+        // Function to save settings
+        function saveSettings() {
+            const currentUserEmail = localStorage.getItem('currentUserEmail');
+            if (!currentUserEmail) return;
+            
+            // Get users data
+            const users = JSON.parse(localStorage.getItem('campusConnectUsers')) || {};
+            
+            // Create or update settings
+            if (!users[currentUserEmail]) return;
+            if (!users[currentUserEmail].settings) {
+                users[currentUserEmail].settings = {};
+            }
+            
+            // Get notification settings
+            users[currentUserEmail].settings.notifications = {
+                applications: document.getElementById('notify-applications').checked,
+                messages: document.getElementById('notify-messages').checked,
+                updates: document.getElementById('notify-updates').checked,
+                reminders: document.getElementById('notify-reminders').checked,
+                frequency: document.getElementById('notification-frequency').value
+            };
+            
+            // Get privacy settings
+            users[currentUserEmail].settings.privacy = {
+                profileVisibility: document.querySelector('input[name="profile-visibility"]:checked').value,
+                showEmail: document.getElementById('show-email').checked,
+                showPhone: document.getElementById('show-phone').checked,
+                showContactPerson: document.getElementById('show-contact-person').checked
+            };
+            
+            // Get data retention settings
+            users[currentUserEmail].settings.dataRetention = document.getElementById('data-retention').value;
+            
+            // Save settings
+            localStorage.setItem('campusConnectUsers', JSON.stringify(users));
+            
+            alert('Settings saved successfully!');
+        }
+        
+        // Function to load settings
+        function loadSettings() {
+            const currentUserEmail = localStorage.getItem('currentUserEmail');
+            if (!currentUserEmail) return;
+            
+            // Get users data
+            const users = JSON.parse(localStorage.getItem('campusConnectUsers')) || {};
+            
+            // Check if user and settings exist
+            if (!users[currentUserEmail] || !users[currentUserEmail].settings) return;
+            
+            const settings = users[currentUserEmail].settings;
+            
+            // Load notification settings
+            if (settings.notifications) {
+                document.getElementById('notify-applications').checked = settings.notifications.applications !== false;
+                document.getElementById('notify-messages').checked = settings.notifications.messages !== false;
+                document.getElementById('notify-updates').checked = settings.notifications.updates !== false;
+                document.getElementById('notify-reminders').checked = settings.notifications.reminders !== false;
+                
+                if (settings.notifications.frequency) {
+                    document.getElementById('notification-frequency').value = settings.notifications.frequency;
+                }
+            }
+            
+            // Load privacy settings
+            if (settings.privacy) {
+                if (settings.privacy.profileVisibility) {
+                    document.getElementById(`visibility-${settings.privacy.profileVisibility}`).checked = true;
+                }
+                
+                document.getElementById('show-email').checked = settings.privacy.showEmail !== false;
+                document.getElementById('show-phone').checked = settings.privacy.showPhone === true;
+                document.getElementById('show-contact-person').checked = settings.privacy.showContactPerson !== false;
+            }
+            
+            // Load data retention settings
+            if (settings.dataRetention) {
+                document.getElementById('data-retention').value = settings.dataRetention;
+            }
+        }
+
+        // Function to set up posted internships page
+        function setupPostedInternshipsPage() {
+            // Handle search and filter
+            const searchInput = document.getElementById('internship-search');
+            const statusFilter = document.getElementById('internship-status-filter');
+            
+            if (searchInput) {
+                searchInput.addEventListener('input', function() {
+                    displayPostedInternships();
+                });
+            }
+            
+            if (statusFilter) {
+                statusFilter.addEventListener('change', function() {
+                    displayPostedInternships();
+                });
+            }
+        }
+
+        // Function to display posted internships
+        function displayPostedInternships() {
+            const currentUserEmail = localStorage.getItem('currentUserEmail');
+            if (!currentUserEmail) return;
+            
+            // Get the container for internships
+            const actualInternshipsList = document.getElementById('actual-internships-list');
+            const emptyInternships = document.getElementById('empty-internships');
+            
+            if (!actualInternshipsList || !emptyInternships) return;
+            
+            // Clear existing content
+            actualInternshipsList.innerHTML = '';
+            
+            // Get all internships from localStorage
+            const allInternships = JSON.parse(localStorage.getItem('campusConnectInternships')) || [];
+            
+            // Filter internships posted by current company
+            let companyInternships = allInternships.filter(internship => internship.companyEmail === currentUserEmail);
+            
+            // Get search and filter values
+            const searchTerm = document.getElementById('internship-search')?.value?.toLowerCase() || '';
+            const statusFilter = document.getElementById('internship-status-filter')?.value || 'all';
+            
+            // Apply search filter
+            if (searchTerm) {
+                companyInternships = companyInternships.filter(internship => 
+                    internship.title.toLowerCase().includes(searchTerm) || 
+                    internship.department.toLowerCase().includes(searchTerm) ||
+                    internship.location.toLowerCase().includes(searchTerm)
+                );
+            }
+            
+            // Apply status filter
+            if (statusFilter !== 'all') {
+                companyInternships = companyInternships.filter(internship => internship.status === statusFilter);
+            }
+            
+            // Check for expired internships and update their status
+            const today = new Date();
+            companyInternships.forEach(internship => {
+                const deadlineDate = new Date(internship.applicationDeadline);
+                if (deadlineDate < today && internship.status === 'active') {
+                    internship.status = 'expired';
+                    
+                    // Update in localStorage
+                    const index = allInternships.findIndex(item => item.id === internship.id);
+                    if (index !== -1) {
+                        allInternships[index] = internship;
+                        localStorage.setItem('campusConnectInternships', JSON.stringify(allInternships));
+                    }
+                }
+            });
+            
+            // Show empty state if no internships
+            if (companyInternships.length === 0) {
+                emptyInternships.style.display = 'block';
+            } else {
+                emptyInternships.style.display = 'none';
+                
+                // Sort internships by posted date (newest first)
+                companyInternships.sort((a, b) => new Date(b.postedDate) - new Date(a.postedDate));
+                
+                // Get the template
+                const template = document.getElementById('internship-card-template');
+                
+                // Create and populate internship cards
+                companyInternships.forEach(internship => {
+                    // Clone the template
+                    const card = template.cloneNode(true);
+                    card.id = `internship-${internship.id}`;
+                    card.style.display = 'block';
+                    
+                    // Populate internship details
+                    card.querySelector('.internship-title').textContent = internship.title;
+                    card.querySelector('.internship-department').textContent = internship.department;
+                    card.querySelector('.internship-location').textContent = internship.location;
+                    card.querySelector('.internship-duration').textContent = internship.duration;
+                    card.querySelector('.internship-stipend').textContent = internship.stipend;
+                    
+                    // Format and set the posted date
+                    const postedDate = new Date(internship.postedDate);
+                    card.querySelector('.internship-date').textContent = postedDate.toLocaleDateString();
+                    
+                    // Set the applicant count
+                    const applicantCount = internship.applicants ? internship.applicants.length : 0;
+                    card.querySelector('.applicant-count').textContent = applicantCount;
+                    
+                    // Calculate and set days remaining until deadline
+                    const deadline = new Date(internship.applicationDeadline);
+                    const timeDiff = deadline - today;
+                    const daysRemaining = Math.ceil(timeDiff / (1000 * 60 * 60 * 24));
+                    card.querySelector('.days-remaining').textContent = daysRemaining > 0 ? daysRemaining : 0;
+                    
+                    // Set views count
+                    card.querySelector('.views-count').textContent = internship.views || 0;
+                    
+                    // Set status indicator
+                    const statusIndicator = card.querySelector('.internship-status');
+                    if (internship.status === 'active') {
+                        statusIndicator.textContent = 'Active';
+                        statusIndicator.style.backgroundColor = 'rgba(72, 187, 120, 0.1)';
+                        statusIndicator.style.color = 'var(--success-color)';
+                        card.querySelector('.toggle-text').textContent = 'Deactivate';
+                    } else if (internship.status === 'closed') {
+                        statusIndicator.textContent = 'Closed';
+                        statusIndicator.style.backgroundColor = 'rgba(113, 128, 150, 0.1)';
+                        statusIndicator.style.color = 'var(--text-light)';
+                        card.querySelector('.toggle-text').textContent = 'Activate';
+                    } else if (internship.status === 'expired') {
+                        statusIndicator.textContent = 'Expired';
+                        statusIndicator.style.backgroundColor = 'rgba(229, 62, 62, 0.1)';
+                        statusIndicator.style.color = 'var(--danger-color)';
+                        card.querySelector('.toggle-text').textContent = 'Reactivate';
+                    }
+                    
+                    // Add event listeners for actions
+                    
+                    // View applicants button
+                    card.querySelector('.view-applicants-btn').addEventListener('click', function() {
+                        navigateToSection('applicants-content');
+                        // Optional: Implement a function to filter applicants for this specific internship
+                    });
+                    
+                    // Edit internship button
+                    card.querySelector('.edit-internship-btn').addEventListener('click', function() {
+                        editInternship(internship.id);
+                    });
+                    
+                    // Toggle status button
+                    card.querySelector('.toggle-status-btn').addEventListener('click', function() {
+                        toggleInternshipStatus(internship.id);
+                    });
+                    
+                    // Delete internship button
+                    card.querySelector('.delete-internship-btn').addEventListener('click', function() {
+                        deleteInternship(internship.id);
+                    });
+                    
+                    // Add the card to the container
+                    actualInternshipsList.appendChild(card);
+                });
+            }
+        }
+
+        // Function to edit internship
+        function editInternship(internshipId) {
+            // Get all internships from localStorage
+            const allInternships = JSON.parse(localStorage.getItem('campusConnectInternships')) || [];
+            
+            // Find the specific internship
+            const internship = allInternships.find(item => item.id === internshipId);
+            
+            if (!internship) {
+                alert('Internship not found');
+                return;
+            }
+            
+            // Navigate to post internship form
+            navigateToSection('postInternship-content');
+            
+            // Populate form with internship data
+            document.getElementById('internship-title').value = internship.title;
+            document.getElementById('internship-department').value = internship.department;
+            document.getElementById('internship-location').value = internship.location;
+            
+            // Handle duration field
+            const durationSelect = document.getElementById('internship-duration');
+            const customDurationContainer = document.getElementById('custom-duration-container');
+            const customDuration = document.getElementById('custom-duration');
+            
+            // Try to match with predefined options
+            const predefinedDurations = ['1 month', '2 months', '3 months', '6 months'];
+            if (predefinedDurations.includes(internship.duration)) {
+                durationSelect.value = internship.duration;
+                customDurationContainer.hidden = true;
+            } else {
+                // Try to extract weeks from custom duration
+                const weekMatch = internship.duration.match(/^(\d+)\s*weeks?$/i);
+                if (weekMatch) {
+                    durationSelect.value = 'custom';
+                    customDurationContainer.hidden = false;
+                    customDuration.value = weekMatch[1];
+                } else {
+                    durationSelect.value = 'custom';
+                    customDurationContainer.hidden = false;
+                    customDuration.value = '';
+                }
+            }
+            
+            document.getElementById('internship-type').value = internship.type;
+            document.getElementById('internship-work-arrangement').value = internship.workArrangement;
+            
+            // Handle stipend field
+            const stipendTypeSelect = document.getElementById('internship-stipend-type');
+            const stipendAmountContainer = document.getElementById('stipend-amount-container');
+            const stipendAmount = document.getElementById('stipend-amount');
+            
+            if (internship.stipend.startsWith('₹')) {
+                stipendTypeSelect.value = 'Paid';
+                stipendAmountContainer.hidden = false;
+                
+                // Extract amount from stipend string (e.g., "₹5000 per month" => "5000")
+                const amountMatch = internship.stipend.match(/₹(\d+)/);
+                if (amountMatch) {
+                    stipendAmount.value = amountMatch[1];
+                } else {
+                    stipendAmount.value = '';
+                }
+            } else {
+                // Check if it's unpaid or college credit
+                if (internship.stipend === 'Unpaid') {
+                    stipendTypeSelect.value = 'Unpaid';
+                } else if (internship.stipend === 'College Credit') {
+                    stipendTypeSelect.value = 'College Credit';
+                } else {
+                    stipendTypeSelect.value = '';
+                }
+                stipendAmountContainer.hidden = true;
+            }
+            
+            document.getElementById('internship-start-date').value = internship.startDate;
+            document.getElementById('internship-description').value = internship.description;
+            document.getElementById('learning-outcomes').value = internship.learningOutcomes;
+            document.getElementById('internship-responsibilities').value = internship.responsibilities;
+            document.getElementById('internship-requirements').value = internship.requirements;
+            document.getElementById('internship-perks').value = internship.perks || '';
+            document.getElementById('application-deadline').value = internship.applicationDeadline;
+            
+            // Handle skills (convert array back to comma-separated string)
+            document.getElementById('internship-skills').value = internship.skills.join(', ');
+            
+            document.getElementById('internship-qualification').value = internship.qualification;
+            
+            // Add a hidden field to indicate we're editing (not creating new)
+            let editingInput = document.getElementById('editing-internship-id');
+            if (!editingInput) {
+                editingInput = document.createElement('input');
+                editingInput.type = 'hidden';
+                editingInput.id = 'editing-internship-id';
+                document.getElementById('internship-form').appendChild(editingInput);
+            }
+            editingInput.value = internshipId;
+            
+            // Change submit button text to indicate editing
+            document.getElementById('post-internship-btn').textContent = 'Update Internship';
+        }
+
+        // Function to toggle internship status
+        function toggleInternshipStatus(internshipId) {
+            // Get all internships from localStorage
+            const allInternships = JSON.parse(localStorage.getItem('campusConnectInternships')) || [];
+            
+            // Find the specific internship
+            const index = allInternships.findIndex(item => item.id === internshipId);
+            
+            if (index === -1) {
+                alert('Internship not found');
+                return;
+            }
+            
+            // Toggle status
+            if (allInternships[index].status === 'active') {
+                allInternships[index].status = 'closed';
+            } else {
+                // If expired or closed, set to active
+                allInternships[index].status = 'active';
+            }
+            
+            // Save back to localStorage
+            localStorage.setItem('campusConnectInternships', JSON.stringify(allInternships));
+            
+            // Refresh the display
+            displayPostedInternships();
+        }
+
+        // Function to delete internship
+        function deleteInternship(internshipId) {
+            // Ask for confirmation
+            const confirm = window.confirm('Are you sure you want to delete this internship? This action cannot be undone.');
+            
+            if (!confirm) return;
+            
+            // Get all internships from localStorage
+            const allInternships = JSON.parse(localStorage.getItem('campusConnectInternships')) || [];
+            
+            // Filter out the internship to delete
+            const updatedInternships = allInternships.filter(item => item.id !== internshipId);
+            
+            // Save back to localStorage
+            localStorage.setItem('campusConnectInternships', JSON.stringify(updatedInternships));
+            
+            // Refresh the display
+            displayPostedInternships();
+        }
+
+        // Function to handle internship form submission
+        function handleInternshipFormSubmit(event) {
+            event.preventDefault();
+            
+            const currentUserEmail = localStorage.getItem('currentUserEmail');
+            if (!currentUserEmail) {
+                alert('Please log in to post an internship');
+                return;
+            }
+            
+            // Get form data
+            const form = document.getElementById('internship-form');
+            const formData = new FormData(form);
+            
+            // Create internship object
+            const internshipData = {
+                id: Date.now().toString(), // Generate unique ID
+                companyEmail: currentUserEmail,
+                title: formData.get('title'),
+                department: formData.get('department'),
+                location: formData.get('location'),
+                duration: formData.get('duration') === 'custom' ? 
+                    `${formData.get('custom-duration')} weeks` : 
+                    formData.get('duration'),
+                type: formData.get('type'),
+                workArrangement: formData.get('work-arrangement'),
+                stipend: formData.get('stipend-type') === 'Paid' ? 
+                    `₹${formData.get('stipend-amount')} per month` : 
+                    formData.get('stipend-type'),
+                startDate: formData.get('start-date'),
+                description: formData.get('description'),
+                learningOutcomes: formData.get('learning-outcomes'),
+                responsibilities: formData.get('responsibilities'),
+                requirements: formData.get('requirements'),
+                perks: formData.get('perks'),
+                skills: formData.get('skills').split(',').map(skill => skill.trim()),
+                qualification: formData.get('qualification'),
+                applicationDeadline: formData.get('application-deadline'),
+                postedDate: new Date().toISOString(),
+                status: 'active',
+                views: 0,
+                applicants: []
+            };
+            
+            // Get existing internships
+            const allInternships = JSON.parse(localStorage.getItem('campusConnectInternships')) || [];
+            
+            // Check if we're editing an existing internship
+            const editingId = formData.get('editing-internship-id');
+            if (editingId) {
+                // Update existing internship
+                const index = allInternships.findIndex(item => item.id === editingId);
+                if (index !== -1) {
+                    allInternships[index] = {
+                        ...allInternships[index],
+                        ...internshipData,
+                        id: editingId, // Keep original ID
+                        views: allInternships[index].views, // Keep original views
+                        applicants: allInternships[index].applicants // Keep original applicants
+                    };
+                }
+            } else {
+                // Add new internship
+                allInternships.push(internshipData);
+            }
+            
+            // Save to localStorage
+            localStorage.setItem('campusConnectInternships', JSON.stringify(allInternships));
+            
+            // Reset form
+            form.reset();
+            
+            // Show success message
+            alert(editingId ? 'Internship updated successfully!' : 'Internship posted successfully!');
+            
+            // Navigate back to posted internships
+            navigateToSection('postedInternships-content');
+            displayPostedInternships();
+        }
+
+        // Add event listener for internship form submission
+        document.addEventListener('DOMContentLoaded', function() {
+            const internshipForm = document.getElementById('internship-form');
+            if (internshipForm) {
+                internshipForm.addEventListener('submit', handleInternshipFormSubmit);
+            }
+        });
+
+        // Function to view student profile
+        function viewStudentProfile(studentEmail) {
+            // Get student details
+            const users = JSON.parse(localStorage.getItem('campusConnectUsers')) || {};
+            const student = users[studentEmail];
+            
+            if (!student) {
+                alert('Student profile not found');
+                return;
+            }
+            
+            // Get student applications
+            const applications = JSON.parse(localStorage.getItem('campusConnectApplications')) || [];
+            const studentApplications = applications.filter(app => app.studentEmail === studentEmail);
+            
+            // Create modal for student profile
+            const modal = document.createElement('div');
+            modal.className = 'modal';
+            modal.id = 'student-profile-modal';
+            modal.style.display = 'block';
+            modal.style.position = 'fixed';
+            modal.style.zIndex = '1000';
+            modal.style.left = '0';
+            modal.style.top = '0';
+            modal.style.width = '100%';
+            modal.style.height = '100%';
+            modal.style.overflow = 'auto';
+            modal.style.backgroundColor = 'rgba(0,0,0,0.4)';
+            
+            // Create profile content
+            const profileContent = document.createElement('div');
+            profileContent.style.backgroundColor = '#fefefe';
+            profileContent.style.margin = '5% auto';
+            profileContent.style.padding = '20px';
+            profileContent.style.width = '80%';
+            profileContent.style.maxWidth = '900px';
+            profileContent.style.borderRadius = '8px';
+            profileContent.style.position = 'relative';
+            profileContent.style.maxHeight = '90vh';
+            profileContent.style.overflow = 'auto';
+            
+            // Add close button
+            const closeBtn = document.createElement('span');
+            closeBtn.innerHTML = '&times;';
+            closeBtn.style.position = 'absolute';
+            closeBtn.style.top = '10px';
+            closeBtn.style.right = '10px';
+            closeBtn.style.color = '#aaa';
+            closeBtn.style.fontSize = '28px';
+            closeBtn.style.fontWeight = 'bold';
+            closeBtn.style.cursor = 'pointer';
+            closeBtn.onclick = function() {
+                document.body.removeChild(modal);
+            };
+            
+            // Create student profile HTML
+            const profileHTML = `
+                <div style="display: flex; align-items: flex-start; gap: 20px; margin-bottom: 30px; flex-wrap: wrap;">
+                    <div style="flex: 0 0 150px;">
+                        <img src="${student.profileImage || 'https://via.placeholder.com/150?text=Profile'}" alt="${student.firstName} ${student.lastName}" style="width: 150px; height: 150px; border-radius: 50%; object-fit: cover; border: 3px solid var(--primary-color);">
+                    </div>
+                    <div style="flex: 1; min-width: 300px;">
+                        <h2 style="margin: 0 0 10px 0; color: var(--text-color); font-size: 1.8rem;">${student.firstName || ''} ${student.lastName || ''}</h2>
+                        <p style="margin: 0 0 5px 0; color: var(--text-light); font-size: 1.1rem;">${student.university || 'No University Listed'}</p>
+                        <p style="margin: 0 0 15px 0; color: var(--text-light);">${student.degree || ''} ${student.major || ''}</p>
+                        
+                        <div style="display: flex; flex-wrap: wrap; gap: 15px; margin-top: 15px;">
+                            <div style="display: flex; align-items: center; gap: 8px;">
+                                <i class="fas fa-envelope" style="color: var(--primary-color);"></i>
+                                <span>${student.email || studentEmail}</span>
+                            </div>
+                            ${student.phone ? `
+                            <div style="display: flex; align-items: center; gap: 8px;">
+                                <i class="fas fa-phone" style="color: var(--primary-color);"></i>
+                                <span>${student.phone}</span>
+                            </div>
+                            ` : ''}
+                            ${student.location ? `
+                            <div style="display: flex; align-items: center; gap: 8px;">
+                                <i class="fas fa-map-marker-alt" style="color: var(--primary-color);"></i>
+                                <span>${student.location}</span>
+                            </div>
+                            ` : ''}
+                        </div>
+                    </div>
+                </div>
+                
+                <div style="margin-bottom: 25px;">
+                    <h3 style="color: var(--text-color); border-bottom: 1px solid #e2e8f0; padding-bottom: 10px;">About</h3>
+                    <p style="line-height: 1.6; color: var(--text-color);">${student.bio || 'No bio available'}</p>
+                </div>
+                
+                ${student.education ? `
+                <div style="margin-bottom: 25px;">
+                    <h3 style="color: var(--text-color); border-bottom: 1px solid #e2e8f0; padding-bottom: 10px;">Education</h3>
+                    <div style="padding: 15px 0;">
+                        <h4 style="margin: 0 0 5px 0; color: var(--text-color);">${student.university || 'University'}</h4>
+                        <p style="margin: 0 0 5px 0; color: var(--text-light);">${student.degree || ''} ${student.major || ''}</p>
+                        ${student.graduationYear ? `<p style="margin: 0; color: var(--text-light);">Expected Graduation: ${student.graduationYear}</p>` : ''}
+                        ${student.gpa ? `<p style="margin: 5px 0 0 0; color: var(--text-light);">GPA: ${student.gpa}</p>` : ''}
+                        ${student.educationDetails ? `<p style="margin: 10px 0 0 0; color: var(--text-color);">${student.educationDetails}</p>` : ''}
+                    </div>
+                </div>
+                ` : ''}
+                
+                ${student.experience ? `
+                <div style="margin-bottom: 25px;">
+                    <h3 style="color: var(--text-color); border-bottom: 1px solid #e2e8f0; padding-bottom: 10px;">Work Experience</h3>
+                    <div style="padding: 15px 0;">
+                        <p style="line-height: 1.6; color: var(--text-color);">${student.experience}</p>
+                    </div>
+                </div>
+                ` : ''}
+                
+                ${student.projects ? `
+                <div style="margin-bottom: 25px;">
+                    <h3 style="color: var(--text-color); border-bottom: 1px solid #e2e8f0; padding-bottom: 10px;">Projects</h3>
+                    <div style="padding: 15px 0;">
+                        <p style="line-height: 1.6; color: var(--text-color);">${student.projects}</p>
+                    </div>
+                </div>
+                ` : ''}
+                
+                ${student.skills ? `
+                <div style="margin-bottom: 25px;">
+                    <h3 style="color: var(--text-color); border-bottom: 1px solid #e2e8f0; padding-bottom: 10px;">Skills</h3>
+                    <div style="display: flex; flex-wrap: wrap; gap: 10px; padding: 15px 0;">
+                        ${student.skills.split(',').map(skill => 
+                            `<span style="background-color: #e2e8f0; padding: 5px 15px; border-radius: 20px; font-size: 0.9rem;">${skill.trim()}</span>`
+                        ).join('')}
+                    </div>
+                </div>
+                ` : ''}
+                
+                ${student.achievements ? `
+                <div style="margin-bottom: 25px;">
+                    <h3 style="color: var(--text-color); border-bottom: 1px solid #e2e8f0; padding-bottom: 10px;">Achievements</h3>
+                    <div style="padding: 15px 0;">
+                        <p style="line-height: 1.6; color: var(--text-color);">${student.achievements}</p>
+                    </div>
+                </div>
+                ` : ''}
+                
+                ${student.certifications ? `
+                <div style="margin-bottom: 25px;">
+                    <h3 style="color: var(--text-color); border-bottom: 1px solid #e2e8f0; padding-bottom: 10px;">Certifications</h3>
+                    <div style="padding: 15px 0;">
+                        <p style="line-height: 1.6; color: var(--text-color);">${student.certifications}</p>
+                    </div>
+                </div>
+                ` : ''}
+                
+                ${student.languages ? `
+                <div style="margin-bottom: 25px;">
+                    <h3 style="color: var(--text-color); border-bottom: 1px solid #e2e8f0; padding-bottom: 10px;">Languages</h3>
+                    <div style="padding: 15px 0;">
+                        <p style="line-height: 1.6; color: var(--text-color);">${student.languages}</p>
+                    </div>
+                </div>
+                ` : ''}
+                
+                ${student.portfolio || student.linkedin || student.github ? `
+                <div style="margin-bottom: 25px;">
+                    <h3 style="color: var(--text-color); border-bottom: 1px solid #e2e8f0; padding-bottom: 10px;">Links</h3>
+                    <div style="display: flex; flex-wrap: wrap; gap: 15px; padding: 15px 0;">
+                        ${student.portfolio ? `
+                        <a href="${student.portfolio}" target="_blank" style="display: flex; align-items: center; gap: 8px; text-decoration: none; color: var(--primary-color);">
+                            <i class="fas fa-globe"></i>
+                            <span>Portfolio</span>
+                        </a>
+                        ` : ''}
+                        
+                        ${student.linkedin ? `
+                        <a href="${student.linkedin}" target="_blank" style="display: flex; align-items: center; gap: 8px; text-decoration: none; color: var(--primary-color);">
+                            <i class="fab fa-linkedin"></i>
+                            <span>LinkedIn</span>
+                        </a>
+                        ` : ''}
+                        
+                        ${student.github ? `
+                        <a href="${student.github}" target="_blank" style="display: flex; align-items: center; gap: 8px; text-decoration: none; color: var(--primary-color);">
+                            <i class="fab fa-github"></i>
+                            <span>GitHub</span>
+                        </a>
+                        ` : ''}
+                    </div>
+                </div>
+                ` : ''}
+                
+                ${student.resume ? `
+                <div style="margin-bottom: 25px;">
+                    <h3 style="color: var(--text-color); border-bottom: 1px solid #e2e8f0; padding-bottom: 10px;">Resume</h3>
+                    <div style="padding: 15px 0;">
+                        <a href="${student.resume}" target="_blank" style="display: inline-flex; align-items: center; gap: 8px; background-color: var(--primary-color); color: white; padding: 8px 15px; border-radius: 4px; text-decoration: none;">
+                            <i class="fas fa-file-pdf"></i>
+                            <span>View Resume</span>
+                        </a>
+                    </div>
+                </div>
+                ` : ''}
+                
+                <div style="margin-bottom: 25px;">
+                    <h3 style="color: var(--text-color); border-bottom: 1px solid #e2e8f0; padding-bottom: 10px;">Applications (${studentApplications.length})</h3>
+                    <div style="padding: 15px 0;">
+                        ${studentApplications.length > 0 ? `
+                        <div style="display: grid; gap: 15px;">
+                            ${studentApplications.map(app => {
+                                const internships = JSON.parse(localStorage.getItem('campusConnectInternships')) || [];
+                                const internship = internships.find(i => i.id === app.internshipId) || {};
+                                const appliedDate = new Date(app.appliedDate).toLocaleDateString();
+                                
+                                let statusColor = '#f59e0b'; // Default (warning/pending)
+                                if (app.status) {
+                                    if (app.status.toLowerCase() === 'accepted') {
+                                        statusColor = 'var(--success-color)';
+                                    } else if (app.status.toLowerCase() === 'rejected') {
+                                        statusColor = 'var(--danger-color)';
+                                    }
+                                }
+                                
+                                return `
+                                <div style="border: 1px solid #e2e8f0; border-radius: 8px; padding: 15px; background-color: #f8fafc;">
+                                    <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+                                        <h4 style="margin: 0; color: var(--text-color);">${app.internshipTitle || internship.title || 'Unknown Position'}</h4>
+                                        <span style="background-color: ${statusColor === '#f59e0b' ? 'rgba(237, 137, 54, 0.1)' : statusColor === 'var(--success-color)' ? 'rgba(72, 187, 120, 0.1)' : 'rgba(229, 62, 62, 0.1)'}; color: ${statusColor}; padding: 3px 10px; border-radius: 12px; font-size: 0.8rem;">
+                                            ${app.status ? (app.status.charAt(0).toUpperCase() + app.status.slice(1)) : 'Pending'}
+                                        </span>
+                                    </div>
+                                    <p style="margin: 0 0 5px 0; color: var(--text-light);">Applied on: ${appliedDate}</p>
+                                    <p style="margin: 0; color: var(--text-light);">Position: ${internship.department || 'Unknown Department'}</p>
+                                </div>
+                                `;
+                            }).join('')}
+                        </div>
+                        ` : `
+                        <p style="color: var(--text-light);">This student has not applied to any other positions at your company.</p>
+                        `}
+                    </div>
+                </div>
+            `;
+            
+            // Add the HTML to the profile content
+            profileContent.innerHTML = profileHTML;
+            
+            // Add close button and content to modal
+            profileContent.appendChild(closeBtn);
+            modal.appendChild(profileContent);
+            
+            // Add modal to the document
+            document.body.appendChild(modal);
+            
+            // Close if click outside of the content
+            window.onclick = function(event) {
+                if (event.target === modal) {
+                    document.body.removeChild(modal);
+                }
+            };
+        }
+
+        // Function to view application details
+        function viewApplicationDetails(applicationId) {
+            const applications = JSON.parse(localStorage.getItem('campusConnectApplications')) || [];
+            const application = applications.find(app => app.id === applicationId);
+            
+            if (!application) {
+                alert('Application not found');
+                return;
+            }
+            
+            // Get internship details and user details
+            const internships = JSON.parse(localStorage.getItem('campusConnectInternships')) || [];
+            const internship = internships.find(intern => intern.id === application.internshipId) || {};
+            
+            const users = JSON.parse(localStorage.getItem('campusConnectUsers')) || {};
+            const student = users[application.studentEmail] || {};
+            
+            // Calculate status styling
+            let statusColor = '#f59e0b'; // Default (pending/warning color)
+            let statusClass = 'warning';
+            
+            if (application.status) {
+                if (application.status.toLowerCase() === 'accepted') {
+                    statusColor = 'var(--success-color)';
+                    statusClass = 'success';
+                } else if (application.status.toLowerCase() === 'rejected') {
+                    statusColor = 'var(--danger-color)';
+                    statusClass = 'danger';
+                }
+            }
+            
+            // Format dates
+            const appliedDate = new Date(application.appliedDate).toLocaleDateString();
+            
+            // Create application details HTML
+            const detailsContainer = document.getElementById('application-details-container');
+            detailsContainer.innerHTML = `
+                <div style="margin-bottom: 20px;">
+                    <span style="display: inline-block; padding: 5px 15px; border-radius: 20px; background-color: ${statusColor}; color: white; font-size: 0.9rem; margin-bottom: 10px;">
+                        ${application.status || 'Pending'}
+                    </span>
+                    <h2 style="margin: 0 0 5px 0; color: var(--text-color);">${application.studentName}</h2>
+                    <p style="margin: 0; color: var(--text-light);">Applied for: ${application.internshipTitle || internship.title || 'Unknown Position'}</p>
+                </div>
+                
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-bottom: 20px;">
+                    <div>
+                        <h3 style="font-size: 1rem; margin-bottom: 10px;">Applicant Information</h3>
+                        <div style="display: flex; flex-direction: column; gap: 8px;">
+                            <div style="display: flex; align-items: center; gap: 5px;">
+                                <i class="fas fa-envelope" style="width: 20px; color: var(--text-light);"></i>
+                                <span>${application.studentEmail}</span>
+                            </div>
+                            <div style="display: flex; align-items: center; gap: 5px;">
+                                <i class="fas fa-phone" style="width: 20px; color: var(--text-light);"></i>
+                                <span>${student.phone || 'Not provided'}</span>
+                            </div>
+                            <div style="display: flex; align-items: center; gap: 5px;">
+                                <i class="fas fa-calendar" style="width: 20px; color: var(--text-light);"></i>
+                                <span>Applied on: ${appliedDate}</span>
+                            </div>
+                        </div>
+                        
+                        <button onclick="viewStudentProfile('${application.studentEmail}')" class="primary-btn" style="margin-top: 15px; width: 100%;">
+                            <i class="fas fa-user-circle" style="margin-right: 5px;"></i>
+                            View Full Profile
+                        </button>
+                    </div>
+                    
+                    <div>
+                        <h3 style="font-size: 1rem; margin-bottom: 10px;">Internship Details</h3>
+                        <div style="display: flex; flex-direction: column; gap: 8px;">
+                            <div style="display: flex; align-items: center; gap: 5px;">
+                                <i class="fas fa-building" style="width: 20px; color: var(--text-light);"></i>
+                                <span>${internship.department || 'Not specified'}</span>
+                            </div>
+                            <div style="display: flex; align-items: center; gap: 5px;">
+                                <i class="fas fa-map-marker-alt" style="width: 20px; color: var(--text-light);"></i>
+                                <span>${internship.location || 'Not specified'}</span>
+                            </div>
+                            <div style="display: flex; align-items: center; gap: 5px;">
+                                <i class="fas fa-money-bill-wave" style="width: 20px; color: var(--text-light);"></i>
+                                <span>${internship.stipend || 'Not specified'}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                ${student.bio ? `
+                <div style="margin-bottom: 20px;">
+                    <h3 style="font-size: 1rem; margin-bottom: 10px;">About Applicant</h3>
+                    <p style="margin: 0; line-height: 1.6;">${student.bio}</p>
+                </div>
+                ` : ''}
+                
+                ${student.education ? `
+                <div style="margin-bottom: 20px;">
+                    <h3 style="font-size: 1rem; margin-bottom: 10px;">Education</h3>
+                    <p style="margin: 0; line-height: 1.6;">${student.education}</p>
+                </div>
+                ` : ''}
+                
+                ${student.skills ? `
+                <div style="margin-bottom: 20px;">
+                    <h3 style="font-size: 1rem; margin-bottom: 10px;">Skills</h3>
+                    <div style="display: flex; flex-wrap: wrap; gap: 8px;">
+                        ${student.skills.split(',').map(skill => 
+                            `<span style="background-color: #e2e8f0; padding: 5px 10px; border-radius: 15px; font-size: 0.8rem;">${skill.trim()}</span>`
+                        ).join('')}
+                    </div>
+                </div>
+                ` : ''}
+                
+                ${application.feedback ? `
+                <div style="margin-top: 20px; padding: 15px; background-color: #f8f9fa; border-radius: var(--border-radius);">
+                    <h3 style="font-size: 1rem; margin-bottom: 10px;">Feedback Provided</h3>
+                    <p style="margin: 0; font-style: italic;">${application.feedback}</p>
+                </div>
+                ` : ''}
+                
+                ${application.status !== 'accepted' && application.status !== 'rejected' ? `
+                <div style="margin-top: 20px; display: flex; gap: 10px; justify-content: center;">
+                    <button id="modal-accept-btn" class="primary-btn" style="background-color: var(--success-color);">
+                        <i class="fas fa-check" style="margin-right: 5px;"></i>
+                        Accept Application
+                    </button>
+                    <button id="modal-reject-btn" class="primary-btn" style="background-color: var(--danger-color);">
+                        <i class="fas fa-times" style="margin-right: 5px;"></i>
+                        Reject Application
+                    </button>
+                </div>
+                ` : ''}
+            `;
+            
+            // Show the application modal
+            const modal = document.getElementById('application-modal');
+            modal.style.display = 'block';
+            
+            // Handle close modal
+            document.getElementById('close-application-modal').addEventListener('click', () => {
+                closeApplicationModal();
+            });
+            
+            // Set up action buttons in the modal if they exist
+            const modalAcceptBtn = document.getElementById('modal-accept-btn');
+            const modalRejectBtn = document.getElementById('modal-reject-btn');
+            
+            if (modalAcceptBtn) {
+                modalAcceptBtn.addEventListener('click', () => {
+                    acceptApplication(applicationId);
+                    closeApplicationModal();
+                });
+            }
+            
+            if (modalRejectBtn) {
+                modalRejectBtn.addEventListener('click', () => {
+                    // Show rejection feedback form instead of immediate rejection
+                    document.getElementById('feedback-form-container').style.display = 'block';
+                    
+                    // Handle feedback submission
+                    document.getElementById('submit-feedback-btn').onclick = () => {
+                        const feedback = document.getElementById('rejection-feedback').value;
+                        rejectApplication(applicationId, feedback);
+                        closeApplicationModal();
+                    };
+                });
+            }
+        }
+
+        // Function to load applicants for the company
+        function loadApplicants() {
+            console.log("Loading applicants...");
+            const currentUserEmail = localStorage.getItem('currentUserEmail');
+            if (!currentUserEmail) return;
+            
+            const applicantsList = document.getElementById('applicants-list');
+            if (!applicantsList) {
+                console.error("Applicants list container not found");
+                return;
+            }
+            
+            // Get applications from localStorage
+            const applications = JSON.parse(localStorage.getItem('campusConnectApplications')) || [];
+            
+            // Filter applications for this company
+            const companyApplications = applications.filter(app => app.companyEmail === currentUserEmail);
+            
+            console.log("Found applications:", companyApplications.length);
+            
+            // Display applications or empty state
+            if (companyApplications.length === 0) {
+                applicantsList.innerHTML = `
+                    <div class="empty-state" style="text-align: center; padding: 50px 20px;">
+                        <i class="fas fa-users" style="font-size: 3rem; color: var(--primary-color); margin-bottom: 20px;"></i>
+                        <h3 style="color: var(--text-color); margin-bottom: 10px;">No Applicants Yet</h3>
+                        <p style="color: var(--text-light); max-width: 600px; margin: 0 auto;">
+                            You haven't received any applications for your internship postings yet. Applications will appear here once students start applying.
+                        </p>
+                    </div>
+                `;
+                return;
+            }
+            
+            // Get user data for applicants
+            const users = JSON.parse(localStorage.getItem('campusConnectUsers')) || {};
+            
+            // Get internships data
+            const internships = JSON.parse(localStorage.getItem('campusConnectInternships')) || [];
+            
+            // Create HTML for applicants
+            const applicantsContainer = document.createElement('div');
+            applicantsContainer.className = 'applicants-container';
+            
+            // Group applications by internship
+            const internshipGroups = {};
+            companyApplications.forEach(app => {
+                if (!internshipGroups[app.internshipId]) {
+                    const internship = internships.find(i => i.id === app.internshipId) || {};
+                    internshipGroups[app.internshipId] = {
+                        internship: internship,
+                        applications: []
+                    };
+                }
+                internshipGroups[app.internshipId].applications.push(app);
+            });
+            
+            // Display applicants grouped by internship
+            Object.values(internshipGroups).forEach(group => {
+                // Add internship heading
+                const internshipHeading = document.createElement('h3');
+                internshipHeading.className = 'internship-heading';
+                internshipHeading.textContent = group.internship.title || 'Unknown Position';
+                internshipHeading.style.margin = '25px 0 15px';
+                internshipHeading.style.padding = '0 0 10px';
+                internshipHeading.style.borderBottom = '1px solid #e2e8f0';
+                internshipHeading.style.color = 'var(--primary-color)';
+                
+                applicantsContainer.appendChild(internshipHeading);
+                
+                // Add applicants for this internship
+                group.applications.forEach(application => {
+                    const student = users[application.studentEmail] || {};
+                    
+                    // Generate random education details if not available
+                    const studentDept = student.major || ['Computer Science', 'Electrical Engineering', 'Mechanical Engineering', 'Civil Engineering'][Math.floor(Math.random() * 4)];
+                    const studentYear = student.graduationYear || ['2023', '2024', '2025', '2026'][Math.floor(Math.random() * 4)];
+                    const studentCGPA = student.gpa || (Math.random() * 3 + 7).toFixed(2); // Random CGPA between 7.00 and 10.00
+                    
+                    const applicantCard = document.createElement('div');
+                    applicantCard.className = 'applicant-card';
+                    applicantCard.setAttribute('data-id', application.id);
+                    applicantCard.setAttribute('data-email', application.studentEmail);
+                    
+                    applicantCard.innerHTML = `
+                        <div class="applicant-info">
+                            <div class="applicant-header">
+                                <div class="applicant-avatar">
+                                    <img src="${student.profileImage || `https://ui-avatars.com/api/?name=${encodeURIComponent(application.studentName)}&background=random`}" alt="${application.studentName}">
+                                </div>
+                                <div class="applicant-details">
+                                    <h3>${application.studentName}</h3>
+                                    <p class="applicant-position">${group.internship.title || application.internshipTitle || 'Unknown Position'}</p>
+                                    <p class="application-date">Applied: ${new Date(application.appliedDate).toLocaleDateString()}</p>
+                                </div>
+                            </div>
+                            <div class="applicant-education">
+                                <p><strong>Department:</strong> ${studentDept}</p>
+                                <p><strong>Graduation Year:</strong> ${studentYear}</p>
+                                <p><strong>CGPA:</strong> ${studentCGPA}</p>
+                            </div>
+                            <div class="status-badge ${application.status.toLowerCase().replace(/\s+/g, '-')}">${application.status}</div>
+                        </div>
+                        <div class="applicant-actions">
+                            <button class="btn-view-profile btn-primary" data-email="${application.studentEmail}">
+                                <i class="fas fa-user"></i> View Profile
+                            </button>
+                            ${application.status === 'pending' ? `
+                            <button class="btn-accept action-btn" data-id="${application.id}" data-email="${application.studentEmail}">
+                                <i class="fas fa-check"></i> Accept
+                            </button>
+                            <button class="btn-reject action-btn" data-id="${application.id}" data-email="${application.studentEmail}">
+                                <i class="fas fa-times"></i> Reject
+                            </button>
+                            ` : ''}
+                        </div>
+                    `;
+                    
+                    applicantsContainer.appendChild(applicantCard);
+                });
+            });
+            
+            // Clear and populate applicants list
+            applicantsList.innerHTML = '';
+            applicantsList.appendChild(applicantsContainer);
+            
+            // Add click event listeners for the action buttons
+            const viewProfileButtons = applicantsList.querySelectorAll('.btn-view-profile');
+            viewProfileButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const studentEmail = this.getAttribute('data-email');
+                    viewStudentProfile(studentEmail);
+                });
+            });
+            
+            const acceptButtons = applicantsList.querySelectorAll('.btn-accept');
+            acceptButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const applicationId = this.getAttribute('data-id');
+                    const studentEmail = this.getAttribute('data-email');
+                    updateApplicationStatus(applicationId, 'accepted');
+                });
+            });
+            
+            const rejectButtons = applicantsList.querySelectorAll('.btn-reject');
+            rejectButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const applicationId = this.getAttribute('data-id');
+                    const studentEmail = this.getAttribute('data-email');
+                    
+                    // Confirm rejection
+                    const confirmReject = confirm(`Are you sure you want to reject this application?`);
+                    if (confirmReject) {
+                        updateApplicationStatus(applicationId, 'rejected');
+                    }
+                });
+            });
+        }
+        
+        // Function to update application status
+        function updateApplicationStatus(applicationId, status) {
+            // Get applications from localStorage
+            const applications = JSON.parse(localStorage.getItem('campusConnectApplications')) || [];
+            
+            // Find the application to update
+            const applicationIndex = applications.findIndex(app => app.id === applicationId);
+            
+            if (applicationIndex === -1) {
+                alert('Application not found');
+                return;
+            }
+            
+            // Update the status
+            applications[applicationIndex].status = status;
+            
+            // Save to localStorage
+            localStorage.setItem('campusConnectApplications', JSON.stringify(applications));
+            
+            // Reload applicants to refresh the UI
+            loadApplicants();
+            
+            // Show success message
+            alert(`Application ${status} successfully`);
+        }
+    </script>
+</body>
+</html>

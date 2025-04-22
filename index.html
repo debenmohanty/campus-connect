@@ -1,0 +1,1962 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Campus Connect - Your Gateway to Career Success</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="assets/css/footer.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #4361ee;
+            --primary-hover: #3a56d4;
+            --secondary-color: #2d3748;
+            --accent-color: #00b4d8;
+            --background-light: #f8f9fa;
+            --text-color: #2d3748;
+            --text-light: #718096;
+            --success-color: #48bb78;
+            --info-color: #4299e1;
+            --warning-color: #ed8936;
+            --danger-color: #f56565;
+            --border-radius: 8px;
+            --transition-speed: 0.3s;
+            --box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 0;
+            color: var(--text-color);
+            overflow-x: hidden;
+            background-color: var(--background-light);
+        }
+
+        /* Animation keyframes */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @keyframes fadeInLeft {
+            from {
+                opacity: 0;
+                transform: translate3d(-30px, 0, 0);
+            }
+            to {
+                opacity: 1;
+                transform: translate3d(0, 0, 0);
+            }
+        }
+        
+        @keyframes fadeInRight {
+            from {
+                opacity: 0;
+                transform: translate3d(30px, 0, 0);
+            }
+            to {
+                opacity: 1;
+                transform: translate3d(0, 0, 0);
+            }
+        }
+        
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-20px);
+            }
+        }
+        
+        @keyframes wave {
+            0% { transform: translateY(0) scaleY(1); }
+            50% { transform: translateY(-10px) scaleY(0.8); }
+            100% { transform: translateY(0) scaleY(1); }
+        }
+        
+        @keyframes moveHorizontal {
+            0% { background-position-x: 0%; }
+            100% { background-position-x: 100%; }
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        
+        @keyframes shimmer {
+            0% {
+                background-position: -468px 0;
+            }
+            100% {
+                background-position: 468px 0;
+            }
+        }
+        
+        /* Header animation */
+        .header-animation {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 120px;
+            background: linear-gradient(90deg, #4361ee, #3a0ca3, #7209b7, #4361ee);
+            background-size: 400% 100%;
+            z-index: -1;
+            animation: moveHorizontal 15s linear infinite;
+            overflow: hidden;
+        }
+        
+        .header-animation::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 40px;
+            background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 120' preserveAspectRatio='none'%3E%3Cpath d='M0,0V46.29c47.79,22.2,103.59,32.17,158,28,70.36-5.37,136.33-33.31,206.8-37.5C438.64,32.43,512.34,53.67,583,72.05c69.27,18,138.3,24.88,209.4,13.08,36.15-6,69.85-17.84,104.45-29.34C989.49,25,1113-14.29,1200,52.47V0Z' opacity='.25' class='shape-fill'%3E%3C/path%3E%3Cpath d='M0,0V15.81C13,36.92,27.64,56.86,47.69,72.05,99.41,111.27,165,111,224.58,91.58c31.15-10.15,60.09-26.07,89.67-39.8,40.92-19,84.73-46,130.83-49.67,36.26-2.85,70.9,9.42,98.6,31.56,31.77,25.39,62.32,62,103.63,73,40.44,10.79,81.35-6.69,119.13-24.28s75.16-39,116.92-43.05c59.73-5.85,113.28,22.88,168.9,38.84,30.2,8.66,59,6.17,87.09-7.5,22.43-10.89,48-26.93,60.65-49.24V0Z' opacity='.5' class='shape-fill'%3E%3C/path%3E%3Cpath d='M0,0V5.63C149.93,59,314.09,71.32,475.83,42.57c43-7.64,84.23-20.12,127.61-26.46,59-8.63,112.48,12.24,165.56,35.4C827.93,77.22,886,95.24,951.2,90c86.53-7,172.46-45.71,248.8-84.81V0Z' class='shape-fill'%3E%3C/path%3E%3C/svg%3E") no-repeat;
+            background-size: 100% 100%;
+            animation: wave 5s ease-in-out infinite;
+        }
+        
+        /* Skip link for accessibility */
+        .skip-link {
+            position: absolute;
+            top: -50px;
+            left: 0;
+            background: var(--primary-color);
+            color: white;
+            padding: 10px;
+            z-index: 1000;
+            transition: top 0.3s;
+        }
+        
+        .skip-link:focus {
+            top: 0;
+        }
+        
+        /* Enhanced hero section */
+        .hero {
+            position: relative;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            padding: 100px 0;
+            text-align: center;
+            overflow: hidden;
+        }
+        
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(41, 67, 172, 0.95), rgba(67, 97, 238, 0.9), rgba(0, 180, 216, 0.85));
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+            z-index: -2;
+        }
+        
+        .hero-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(67, 97, 238, 0.8) 0%, rgba(58, 12, 163, 0.8) 100%), url('https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80') center center/cover;
+            z-index: 0;
+        }
+        
+        .hero-content {
+            position: relative;
+            z-index: 1;
+            max-width: 900px;
+            padding: 0 20px;
+        }
+        
+        .hero h1 {
+            font-size: 3.5rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            animation: fadeInUp 1s ease-out;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+            background: linear-gradient(90deg, #ffffff, #f0f0f0);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-fill-color: transparent;
+        }
+        
+        .hero p {
+            font-size: 1.4rem;
+            max-width: 800px;
+            margin: 0 auto 40px;
+            animation: fadeInUp 1s ease-out 0.3s;
+            animation-fill-mode: both;
+            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+            line-height: 1.6;
+        }
+        
+        .cta-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 25px;
+            animation: fadeInUp 1s ease-out 0.6s;
+            animation-fill-mode: both;
+        }
+        
+        .btn-large {
+            padding: 16px 38px;
+            font-size: 1.1rem;
+            text-decoration: none;
+            border-radius: 50px;
+            transition: all 0.3s;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+        }
+        
+        .btn-primary {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+        }
+        
+        .btn-primary::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.7s;
+            z-index: -1;
+        }
+        
+        .btn-primary:hover::before {
+            left: 100%;
+        }
+        
+        .btn-primary:hover {
+            background-color: var(--primary-hover);
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+        }
+        
+        .btn-primary-outline {
+            border: 2px solid white;
+            color: white;
+            background-color: transparent;
+            backdrop-filter: blur(5px);
+        }
+        
+        .btn-primary-outline:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+        }
+        
+        /* Floating elements */
+        .floating-icon {
+            position: absolute;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background-color: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(5px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5rem;
+            animation: float 5s infinite ease-in-out;
+            z-index: 1;
+        }
+        
+        .icon-1 {
+            top: 20%;
+            left: 15%;
+            animation-delay: 0s;
+        }
+        
+        .icon-2 {
+            top: 60%;
+            left: 20%;
+            animation-delay: 1s;
+        }
+        
+        .icon-3 {
+            top: 30%;
+            right: 15%;
+            animation-delay: 2s;
+        }
+        
+        .icon-4 {
+            top: 70%;
+            right: 20%;
+            animation-delay: 3s;
+        }
+        
+        /* Animated scroll indicator */
+        .scroll-indicator {
+            position: absolute;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: white;
+            font-size: 0.8rem;
+            letter-spacing: 2px;
+            opacity: 0.8;
+        }
+        
+        .mouse {
+            width: 30px;
+            height: 50px;
+            border: 2px solid white;
+            border-radius: 20px;
+            margin-top: 10px;
+            position: relative;
+        }
+        
+        .mouse:after {
+            content: '';
+            position: absolute;
+            top: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 4px;
+            height: 10px;
+            background-color: white;
+            border-radius: 2px;
+            animation: scroll 2s infinite;
+        }
+        
+        @keyframes scroll {
+            0% {
+                opacity: 1;
+                transform: translateX(-50%) translateY(0);
+            }
+            100% {
+                opacity: 0;
+                transform: translateX(-50%) translateY(20px);
+            }
+        }
+        
+        /* Features section enhancement */
+        .features {
+            padding: 120px 0;
+            background-color: var(--background-light);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .features::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%234361ee' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+            opacity: 0.8;
+            z-index: 0;
+        }
+        
+        .section-title {
+            text-align: center;
+            margin-bottom: 80px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .section-title h2 {
+            color: var(--secondary-color);
+            font-size: 2.8rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            position: relative;
+            display: inline-block;
+        }
+        
+        .section-title h2::after {
+            content: '';
+            position: absolute;
+            bottom: -15px;
+            left: 50%;
+            width: 80px;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
+            transform: translateX(-50%);
+            border-radius: 2px;
+        }
+        
+        .section-title p {
+            max-width: 700px;
+            margin: 20px auto 0;
+            color: var(--text-light);
+            font-size: 1.1rem;
+            line-height: 1.6;
+        }
+        
+        .feature-card {
+            background-color: white;
+            border-radius: 16px;
+            padding: 50px 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+            text-align: center;
+            transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            position: relative;
+            z-index: 1;
+            border: 1px solid rgba(0, 0, 0, 0.03);
+            overflow: hidden;
+        }
+        
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 0;
+            background: linear-gradient(135deg, rgba(67, 97, 238, 0.05), rgba(0, 180, 216, 0.05));
+            z-index: -1;
+            transition: height 0.5s ease;
+        }
+        
+        .feature-card:hover::before {
+            height: 100%;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-15px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
+        }
+        
+        .feature-card:hover .feature-icon {
+            color: white;
+            background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+            transform: rotateY(360deg);
+        }
+        
+        .feature-icon {
+            font-size: 2.2rem;
+            color: var(--primary-color);
+            margin-bottom: 30px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 90px;
+            height: 90px;
+            border-radius: 50%;
+            background-color: rgba(67, 97, 238, 0.07);
+            transition: all 0.5s;
+            box-shadow: 0 10px 20px rgba(67, 97, 238, 0.1);
+        }
+        
+        .feature-card h3 {
+            color: var(--secondary-color);
+            margin-bottom: 20px;
+            font-size: 1.5rem;
+            font-weight: 600;
+            transition: color 0.3s;
+        }
+        
+        .feature-card p {
+            color: var(--text-light);
+            line-height: 1.7;
+            margin-bottom: 20px;
+        }
+        
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 40px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .stats {
+            padding: 100px 0;
+            background: linear-gradient(135deg, #4361ee, #3a0ca3);
+            color: white;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .stats::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+            opacity: 0.15;
+        }
+        
+        .section-wave-top {
+            position: relative;
+        }
+        
+        .section-wave-top::before {
+            content: '';
+            position: absolute;
+            top: -3px;
+            left: 0;
+            width: 100%;
+            height: 70px;
+            background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 120' preserveAspectRatio='none'%3E%3Cpath d='M0,0V46.29c47.79,22.2,103.59,32.17,158,28,70.36-5.37,136.33-33.31,206.8-37.5C438.64,32.43,512.34,53.67,583,72.05c69.27,18,138.3,24.88,209.4,13.08,36.15-6,69.85-17.84,104.45-29.34C989.49,25,1113-14.29,1200,52.47V0Z' fill='%23f8f9fa'%3E%3C/path%3E%3C/svg%3E") no-repeat;
+            background-size: 100% 100%;
+            transform: rotate(180deg);
+            z-index: 1;
+        }
+        
+        .section-wave-bottom {
+            position: relative;
+        }
+        
+        .section-wave-bottom::after {
+            content: '';
+            position: absolute;
+            bottom: -3px;
+            left: 0;
+            width: 100%;
+            height: 70px;
+            background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 120' preserveAspectRatio='none'%3E%3Cpath d='M0,0V46.29c47.79,22.2,103.59,32.17,158,28,70.36-5.37,136.33-33.31,206.8-37.5C438.64,32.43,512.34,53.67,583,72.05c69.27,18,138.3,24.88,209.4,13.08,36.15-6,69.85-17.84,104.45-29.34C989.49,25,1113-14.29,1200,52.47V0Z' fill='%23f8f9fa'%3E%3C/path%3E%3C/svg%3E") no-repeat;
+            background-size: 100% 100%;
+            z-index: 1;
+        }
+        
+        .stats .container {
+            position: relative;
+            z-index: 2;
+        }
+        
+        .stats h2 {
+            margin-bottom: 60px;
+            font-size: 2.8rem;
+            font-weight: 700;
+            position: relative;
+            display: inline-block;
+        }
+        
+        .stats h2::after {
+            content: '';
+            position: absolute;
+            bottom: -15px;
+            left: 50%;
+            width: 80px;
+            height: 4px;
+            background: white;
+            transform: translateX(-50%);
+            border-radius: 2px;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 30px;
+        }
+        
+        @media (max-width: 992px) {
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 40px;
+            }
+        }
+        
+        @media (max-width: 576px) {
+            .stats-grid {
+                grid-template-columns: 1fr;
+                gap: 30px;
+            }
+        }
+        
+        .stat-item {
+            padding: 30px;
+            border-radius: 16px;
+            background-color: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(8px);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .stat-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            transition: left 1s;
+        }
+        
+        .stat-item:hover::before {
+            left: 100%;
+        }
+        
+        .stat-item:hover {
+            transform: translateY(-10px);
+            background-color: rgba(255, 255, 255, 0.12);
+        }
+        
+        .stat-number {
+            font-size: 3.5rem;
+            font-weight: 700;
+            margin-bottom: 15px;
+            color: white;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+        
+        .stat-number::after {
+            content: '+';
+            font-size: 2rem;
+            position: absolute;
+            top: 5px;
+            right: -15px;
+        }
+        
+        .stat-label {
+            font-size: 1.2rem;
+            font-weight: 500;
+            color: rgba(255, 255, 255, 0.9);
+        }
+        
+        .testimonials {
+            padding: 80px 0;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .testimonials::before {
+            content: '';
+            position: absolute;
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, rgba(67, 97, 238, 0.1) 0%, transparent 70%);
+            border-radius: 50%;
+            top: -100px;
+            left: -100px;
+            z-index: -1;
+        }
+        
+        .testimonials::after {
+            content: '';
+            position: absolute;
+            width: 250px;
+            height: 250px;
+            background: radial-gradient(circle, rgba(58, 12, 163, 0.1) 0%, transparent 70%);
+            border-radius: 50%;
+            bottom: -100px;
+            right: -100px;
+            z-index: -1;
+        }
+        
+        .testimonial-slider-container {
+            position: relative;
+            margin-top: 50px;
+            padding: 0 70px;
+            overflow: hidden;
+        }
+        
+        .testimonial-nav {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 10;
+            font-size: 18px;
+        }
+        
+        .testimonial-nav.prev {
+            left: 10px;
+        }
+        
+        .testimonial-nav.next {
+            right: 10px;
+        }
+        
+        .testimonial-nav:hover {
+            background-color: var(--primary-hover);
+            transform: translateY(-50%) scale(1.1);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+        }
+        
+        .testimonial-nav:focus {
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.3), 0 8px 20px rgba(0, 0, 0, 0.2);
+        }
+        
+        @media (max-width: 768px) {
+            .testimonial-slider-container {
+            padding: 0 50px;
+            }
+            
+            .testimonial-nav {
+                width: 40px;
+                height: 40px;
+                font-size: 14px;
+            }
+        }
+        
+        .testimonial-controls {
+            position: relative;
+            margin-top: 30px;
+        }
+        
+        .testimonial-dots {
+            display: flex;
+            gap: 8px;
+            justify-content: center;
+        }
+        
+        .testimonial-slider {
+            display: flex;
+            transition: transform 0.5s ease;
+            margin: 0 -15px;
+            cursor: grab;
+        }
+        
+        .testimonial-slider:active {
+            cursor: grabbing;
+        }
+        
+        .testimonial-slide {
+            flex: 0 0 100%;
+            padding: 0 15px;
+            box-sizing: border-box;
+        }
+        
+        @media (min-width: 768px) {
+            .testimonial-slide {
+                flex: 0 0 50%;
+            }
+        }
+        
+        @media (min-width: 992px) {
+            .testimonial-slide {
+                flex: 0 0 33.333%;
+            }
+        }
+        
+        .testimonial-slide {
+            opacity: 0.85;
+            transform: scale(0.95);
+            transition: all 0.5s ease;
+            padding: 10px 15px;
+            box-sizing: border-box;
+        }
+        
+        .testimonial-slide.active {
+            opacity: 1;
+            transform: scale(1);
+        }
+        
+        .testimonial-card {
+            background-color: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            height: 100%;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            transform: translateY(0);
+            position: relative;
+            z-index: 1;
+            background: linear-gradient(to bottom right, #ffffff, #f8f9ff);
+            border: 1px solid rgba(67, 97, 238, 0.1);
+        }
+        
+        .testimonial-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 40px rgba(67, 97, 238, 0.2);
+            border-color: rgba(67, 97, 238, 0.2);
+        }
+        
+        .quote-icon {
+            font-size: 2rem;
+            color: rgba(67, 97, 238, 0.2);
+            margin-bottom: 15px;
+            display: inline-block;
+            position: relative;
+        }
+        
+        .quote-icon:after {
+            content: '';
+            position: absolute;
+            width: 40px;
+            height: 40px;
+            background: radial-gradient(circle, rgba(67, 97, 238, 0.1) 0%, transparent 70%);
+            border-radius: 50%;
+            top: -10px;
+            left: -10px;
+            z-index: -1;
+        }
+        
+        .testimonial-text {
+            position: relative;
+            z-index: 1;
+        }
+        
+        .testimonial-text:before {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(67, 97, 238, 0.03) 0%, transparent 100%);
+            z-index: -1;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .testimonial-card:hover .testimonial-text:before {
+            opacity: 1;
+        }
+        
+        .testimonial-card .author-img {
+            transition: transform 0.5s ease, border-color 0.3s ease;
+        }
+        
+        .testimonial-card:hover .author-img {
+            transform: scale(1.05);
+            border-color: rgba(67, 97, 238, 0.5);
+        }
+        
+        .testimonial-slide {
+            opacity: 0.7;
+            transform: scale(0.95);
+            transition: all 0.5s ease;
+            padding: 10px 15px;
+            box-sizing: border-box;
+        }
+        
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @media (min-width: 768px) {
+            .testimonial-slide {
+                flex: 0 0 50%;
+            }
+        }
+        
+        .dark-mode-toggle {
+            background-color: transparent;
+            border: none;
+            color: white;
+            font-size: 1.2rem;
+            cursor: pointer;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        
+        .dark-mode-toggle:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+        
+        /* Particle background */
+        .particles-js {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: 1;
+        }
+        
+        .hero .container {
+            position: relative;
+            z-index: 2;
+        }
+        
+        /* Animated gradient background */
+        .animated-gradient {
+            background: linear-gradient(-45deg, #2c3e50, #3498db, #2980b9, #34495e);
+            background-size: 400% 400%;
+            animation: gradient 15s ease infinite;
+        }
+        
+        @keyframes gradient {
+            0% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+        
+        /* Dark mode specific styles for index page */
+        .dark-mode .hero.animated-gradient {
+            background: linear-gradient(-45deg, #1a374d, #2980b9, #1e5f8c, #1c4966);
+            background-size: 400% 400%;
+        }
+        
+        .dark-mode .hero h1,
+        .dark-mode .hero p {
+            color: #f5f5f5;
+        }
+        
+        .dark-mode .btn-white {
+            background-color: #f5f5f5;
+            color: var(--primary-color);
+        }
+        
+        .dark-mode .cta-section {
+            background: linear-gradient(rgba(28, 98, 159, 0.9), rgba(28, 98, 159, 0.9)),
+                url('https://images.unsplash.com/photo-1552664730-d307ca884978?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80') no-repeat center center/cover;
+        }
+        
+        .dark-mode footer p {
+            color: #f5f5f5;
+        }
+        
+        /* Particles color adjustment for dark mode */
+        .dark-mode .particles-js canvas {
+            filter: brightness(0.8);
+        }
+        
+        /* Custom styles for homepage */
+        .letter {
+            display: inline-block;
+        }
+        
+        /* Login and Register Button styles */
+        .login-btn, .register-btn {
+            background-color: transparent;
+            border: 2px solid var(--primary-color);
+            color: var(--primary-color);
+            padding: 8px 15px;
+            border-radius: 50px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .login-btn:hover, .register-btn:hover {
+            background-color: var(--primary-color);
+            color: white;
+            transform: translateY(-2px);
+        }
+        
+        .register-btn {
+            background-color: var(--primary-color);
+            color: white;
+        }
+        
+        .register-btn:hover {
+            background-color: var(--primary-hover);
+            border-color: var(--primary-hover);
+        }
+    </style>
+</head>
+<body>
+    <div class="header-animation"></div>
+    <!-- Skip link for accessibility -->
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+    
+    <header class="landing-header">
+        <nav class="container">
+            <div class="logo" aria-label="Campus Connect logo">Campus Connect</div>
+            <ul class="nav-links">
+                <li><a href="index.html" class="active" aria-current="page">Home</a></li>
+                <li><a href="about.html">About Us</a></li>
+                <li><a href="services.html" class="tooltip">Services
+                    <span class="tooltip-text">Explore our services</span>
+                </a></li>
+                <li><a href="#statistics" class="tooltip">Statistics
+                    <span class="tooltip-text">View our achievements</span>
+                </a></li>
+                <li><a href="#testimonials" class="tooltip">Testimonials
+                    <span class="tooltip-text">Success stories</span>
+                </a></li>
+                <li><a href="login.html" class="login-btn"><i class="fas fa-sign-in-alt"></i> Login</a></li>
+                <li><a href="register.html" class="register-btn"><i class="fas fa-user-plus"></i> Register</a></li>
+            </ul>
+            <!-- Dark mode toggle button -->
+            <button class="dark-mode-toggle tooltip" aria-label="Toggle dark mode">
+                <i class="fas fa-moon"></i>
+                <span class="tooltip-text">Switch to dark mode</span>
+            </button>
+        </nav>
+    </header>
+    
+    <section class="hero" id="main-content">
+        <div class="hero-bg"></div>
+        <div class="floating-icon icon-1"><i class="fas fa-graduation-cap"></i></div>
+        <div class="floating-icon icon-2"><i class="fas fa-briefcase"></i></div>
+        <div class="floating-icon icon-3"><i class="fas fa-laptop-code"></i></div>
+        <div class="floating-icon icon-4"><i class="fas fa-chart-line"></i></div>
+        
+        <div class="hero-content">
+            <h1 class="animate__animated animate__fadeInDown">Campus Connect </h1>
+            <p class="animate__animated animate__fadeInUp animate__delay-1s">Bridging the gap between talented students and industry-leading companies. Our platform offers a seamless experience for campus placements, career guidance, and professional development.</p>
+            <div class="cta-buttons animate__animated animate__fadeInUp animate__delay-2s">
+                <a href="register.html" class="btn-large btn-primary">Get Started</a>
+                <a href="login.html" class="btn-large btn-primary-outline">Login</a>
+            </div>
+        </div>
+        
+        <div class="scroll-indicator">
+            <span>SCROLL DOWN</span>
+            <div class="mouse"></div>
+        </div>
+    </section>
+    
+    <section class="features">
+        <div class="container">
+            <div class="section-title">
+                <h2>Key Features</h2>
+                <p>Our platform offers a comprehensive suite of tools and services to streamline the campus placement process.</p>
+            </div>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div>
+                        <div class="feature-icon">
+                            <i class="fas fa-user-graduate"></i>
+                        </div>
+                        <h3>Student Profiles</h3>
+                        <p>Create comprehensive profiles showcasing academic achievements, skills, and experiences to stand out to potential employers.</p>
+                    </div>
+                </div>
+                
+                <div class="feature-card">
+                    <div>
+                        <div class="feature-icon">
+                            <i class="fas fa-building"></i>
+                        </div>
+                        <h3>Company Dashboard</h3>
+                        <p>Companies can manage recruitment drives, post job openings, and track applications all in one centralized location.</p>
+                    </div>
+                </div>
+                
+                <div class="feature-card">
+                    <div>
+                        <div class="feature-icon">
+                            <i class="fas fa-calendar-alt"></i>
+                        </div>
+                        <h3>Interview Scheduling</h3>
+                        <p>Automated scheduling system for interviews and assessments, with reminders and calendar integration.</p>
+                    </div>
+                </div>
+                
+                <div class="feature-card">
+                    <div>
+                        <div class="feature-icon">
+                            <i class="fas fa-chart-pie"></i>
+                        </div>
+                        <h3>Analytics Dashboard</h3>
+                        <p>Comprehensive analytics and reporting tools to track placement statistics and performance metrics.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <section class="stats section-pattern section-wave-top section-wave-bottom" id="statistics">
+        <div class="container">
+            <h2>Our Success in Numbers</h2>
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <div class="stat-number" data-count="50">0</div>
+                    <div class="stat-label">Company Partners</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number" data-count="500">0</div>
+                    <div class="stat-label">Students Placed</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number" data-count="92">0</div>
+                    <div class="stat-label">Placement Rate</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number" data-count="15">0</div>
+                    <div class="stat-label">Average Package (LPA)</div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <section class="testimonials" id="testimonials">
+        <div class="container">
+            <h2>Success Stories</h2>
+            <div class="testimonial-slider-container">
+                <button class="testimonial-nav prev" aria-label="Previous testimonial"><i class="fas fa-chevron-left"></i></button>
+                <div class="testimonial-slider">
+                    <div class="testimonial-slide">
+                        <div class="testimonial-card">
+                            <div class="testimonial-content">
+                                <div class="quote-icon"><i class="fas fa-quote-left"></i></div>
+                                <p class="testimonial-text">The Placement Cell portal made my job search incredibly easy. I got multiple offers through the platform and landed my dream job at Microsoft!</p>
+                                <div class="testimonial-author">
+                                <!--
+                                    <div class="author-img">
+                                        <img src="https://via.placeholder.com/60?text=AR" alt="Aditya Rath">
+                                    </div>
+                                            -->
+                                    <div class="author-info">
+                                        <h4>Aditya Rath</h4>
+                                        <p>Computer Science, Batch of 2023</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="testimonial-slide">
+                        <div class="testimonial-card">
+                            <div class="testimonial-content">
+                                <div class="quote-icon"><i class="fas fa-quote-left"></i></div>
+                                <p class="testimonial-text">The mentorship program connected me with industry experts who guided me throughout my career journey. The counseling sessions were incredibly valuable.</p>
+                                <div class="testimonial-author">
+                                    <!--
+                                    <div class="author-img">
+                                        <img src="https://via.placeholder.com/60?text=KJ" alt="Kesav Jha">
+                                    </div>
+                                    -->
+                                    <div class="author-info">
+                                        <h4>Kesav Jha</h4>
+                                        <p>Data Science, Batch of 2022</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="testimonial-slide">
+                        <div class="testimonial-card">
+                            <div class="testimonial-content">
+                                <div class="quote-icon"><i class="fas fa-quote-left"></i></div>
+                                <p class="testimonial-text">As a recruiter, the Placement Cell portal made it super efficient to find and shortlist candidates. The quality of applicants has always been exceptional.</p>
+                                <div class="testimonial-author">
+                                    <!--
+                                    <div class="author-img">
+                                        <img src="https://via.placeholder.com/60?text=AM" alt="Ayushman Mohanty">
+                                    </div>
+                                    -->
+                                    <div class="author-info">
+                                        <h4>Ayushman Mohanty</h4>
+                                        <p>HR Manager, Tech Solutions Inc.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="testimonial-slide">
+                        <div class="testimonial-card">
+                            <div class="testimonial-content">
+                                <div class="quote-icon"><i class="fas fa-quote-left"></i></div>
+                                <p class="testimonial-text">The resume building workshops and mock interviews prepared me for the competitive job market. I secured an internship at Google that turned into a full-time role!</p>
+                                <div class="testimonial-author">
+                                    <!--
+                                    <div class="author-img">
+                                        <img src="https://via.placeholder.com/60?text=SP" alt="Shreya Patel">
+                                    </div>
+                                    -->
+                                    <div class="author-info">
+                                        <h4>Shreya Patel</h4>
+                                        <p>Software Engineering, Batch of 2023</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="testimonial-slide">
+                        <div class="testimonial-card">
+                            <div class="testimonial-content">
+                                <div class="quote-icon"><i class="fas fa-quote-left"></i></div>
+                                <p class="testimonial-text">The analytics and insights provided by Campus Connect helped our university increase placement rates by 35%. The platform streamlined the entire process beautifully.</p>
+                                <div class="testimonial-author">
+                                    <!--
+                                    <div class="author-img">
+                                        <img src="https://via.placeholder.com/60?text=RK" alt="Dr. Rajesh Kumar">
+                                    </div>
+                                    -->
+                                    <div class="author-info">
+                                        <h4>Dr. Rajesh Kumar</h4>
+                                        <p>Placement Director, Delhi Technical University</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="testimonial-slide">
+                        <div class="testimonial-card">
+                            <div class="testimonial-content">
+                                <div class="quote-icon"><i class="fas fa-quote-left"></i></div>
+                                <p class="testimonial-text">Coming from a tier-2 city, I had limited exposure to big tech companies. Campus Connect bridged that gap and helped me secure a position at Amazon. Forever grateful!</p>
+                                <div class="testimonial-author">
+                                    <!--
+                                    <div class="author-img">
+                                        <img src="https://via.placeholder.com/60?text=VG" alt="Vikram Gupta">
+                                    </div>
+                                    -->
+                                    <div class="author-info">
+                                        <h4>Vikram Gupta</h4>
+                                        <p>Electronics Engineering, Batch of 2022</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="testimonial-slide">
+                        <div class="testimonial-card">
+                            <div class="testimonial-content">
+                                <div class="quote-icon"><i class="fas fa-quote-left"></i></div>
+                                <p class="testimonial-text">The skill assessment features helped me identify my strengths and areas for improvement. I focused on upskilling and landed a role at a leading AI startup!</p>
+                                <div class="testimonial-author">
+                                    <!--
+                                    <div class="author-img">
+                                        <img src="https://via.placeholder.com/60?text=PN" alt="Priya Nair">
+                                    </div>
+                                    -->
+                                    <div class="author-info">
+                                        <h4>Priya Nair</h4>
+                                        <p>Artificial Intelligence, Batch of 2023</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="testimonial-slide">
+                        <div class="testimonial-card">
+                            <div class="testimonial-content">
+                                <div class="quote-icon"><i class="fas fa-quote-left"></i></div>
+                                <p class="testimonial-text">We've been recruiting through Campus Connect for 3 years now. The quality of candidates and the efficiency of the process has made it our preferred platform for campus hiring.</p>
+                                <div class="testimonial-author">
+                                    <!--
+                                    <div class="author-img">
+                                        <img src="https://via.placeholder.com/60?text=SM" alt="Sunita Mehta">
+                                    </div>
+                                    -->
+                                    <div class="author-info">
+                                        <h4>Sunita Mehta</h4>
+                                        <p>Talent Acquisition Head, Infosys</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <button class="testimonial-nav next" aria-label="Next testimonial"><i class="fas fa-chevron-right"></i></button>
+                <div class="testimonial-controls">
+                    <div class="testimonial-dots"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <section class="cta-section section-pattern">
+        <div class="container">
+            <h2>Ready to Advance Your Career?</h2>
+            <p>Join our Campus Connect today and take the first step towards a successful career. Whether you're a student, faculty member, or a company, we're here to connect you with opportunities.</p>
+            <a href="login.html" class="btn-large btn-white">Get Started Now</a>
+        </div>
+    </section>
+    
+    <footer class="enhanced-footer">
+        <div class="footer-wave"></div>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section about-section">
+                    <div class="footer-logo">
+                        <h3>Campus Connect</h3>
+                        <div class="logo-underline"></div>
+                    </div>
+                    <p>Building meaningful connections between talented students and industry-leading companies since 2025.</p>
+                    <div class="contact-info">
+                        <div class="contact-item">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <span>Berhampur, Odisha, India</span>
+                        </div>
+                        <div class="contact-item">
+                            <i class="fas fa-phone"></i>
+                            <span>+91 9439801190</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="footer-section links-section">
+                    <h3>Quick Links</h3>
+                    <div class="footer-links-container">
+                        <ul class="footer-links">
+                            <li><a href="index.html"><i class="fas fa-chevron-right"></i> Home</a></li>
+                            <li><a href="about.html"><i class="fas fa-chevron-right"></i> About Us</a></li>
+                            <li><a href="services.html"><i class="fas fa-chevron-right"></i> Services</a></li>
+                            <li><a href="login.html"><i class="fas fa-chevron-right"></i> Login/Register</a></li>
+                        </ul>
+                        <ul class="footer-links">
+                            <li><a href="#statistics"><i class="fas fa-chevron-right"></i> Statistics</a></li>
+                            <li><a href="#testimonials"><i class="fas fa-chevron-right"></i> Testimonials</a></li>
+                            <li><a href="career-counseling.html"><i class="fas fa-chevron-right"></i> Career Counseling</a></li>
+                            <li><a href="mentorship.html"><i class="fas fa-chevron-right"></i> Mentorship</a></li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="footer-section contact-section">
+                    <h3>Connect With Us</h3>
+                    <p>Stay updated with our latest news and events. Follow us on social media or subscribe to our newsletter.</p>
+                    <form class="footer-subscribe">
+                        <input type="email" placeholder="Your Email Address" required>
+                        <button type="submit" class="subscribe-btn"><i class="fas fa-paper-plane"></i></button>
+                    </form>
+                    <div class="social-icons">
+                        <a href="#" aria-label="Facebook" class="social-icon facebook"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" aria-label="Twitter" class="social-icon twitter"><i class="fab fa-twitter"></i></a>
+                        <a href="#" aria-label="LinkedIn" class="social-icon linkedin"><i class="fab fa-linkedin-in"></i></a>
+                        <a href="#" aria-label="Instagram" class="social-icon instagram"><i class="fab fa-instagram"></i></a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <div class="footer-bottom-content">
+                    <div class="copyright">
+                        <p>&copy; 2025 Campus Connect. All rights reserved.</p>
+                    </div>
+                    <div class="footer-bottom-links">
+                        <a href="privacy-policy.html">Privacy Policy</a>
+                        <span class="footer-divider">|</span>
+                        <a href="terms-of-service.html">Terms of Service</a>
+                        <span class="footer-divider">|</span>
+                        <a href="cookie-policy.html">Cookie Policy</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Add animation classes to elements
+            function animateOnScroll() {
+                const animatables = document.querySelectorAll('.animate-on-scroll');
+                const windowHeight = window.innerHeight;
+                
+                animatables.forEach(element => {
+                    const elementPosition = element.getBoundingClientRect().top;
+                    if (elementPosition < windowHeight - 50) {
+                        element.classList.add('animated');
+                    }
+                });
+            }
+            
+            // Add animate-on-scroll class to elements
+            document.querySelectorAll('.feature-card, .stat-item, .testimonial-card, .section-title').forEach(el => {
+                el.classList.add('animate-on-scroll');
+            });
+            
+            // Run on load and scroll
+            animateOnScroll();
+            window.addEventListener('scroll', animateOnScroll);
+            
+            // Testimonial Slider functionality
+            const slider = document.querySelector('.testimonial-slider');
+            const slides = document.querySelectorAll('.testimonial-slide');
+            const dotsContainer = document.querySelector('.testimonial-dots');
+            const prevBtn = document.querySelector('.testimonial-nav.prev');
+            const nextBtn = document.querySelector('.testimonial-nav.next');
+            
+            let currentIndex = 0;
+            let slideWidth;
+            let slidesPerView = 1;
+            let isDragging = false;
+            let startPos = 0;
+            let currentTranslate = 0;
+            let prevTranslate = 0;
+            let autoSlideInterval;
+            
+            // Create dots based on number of slides divided by slidesPerView
+            function createDots() {
+                dotsContainer.innerHTML = '';
+                
+                const totalDots = Math.ceil(slides.length / slidesPerView);
+                
+                for (let i = 0; i < totalDots; i++) {
+                    const dot = document.createElement('div');
+                    dot.classList.add('testimonial-dot');
+                    if (i === 0) dot.classList.add('active');
+                    
+                    dot.addEventListener('click', () => {
+                        goToSlide(i * slidesPerView);
+                    });
+                    
+                    dotsContainer.appendChild(dot);
+                }
+            }
+            
+            // Set slide width and slidesPerView based on screen size
+            function setSlideWidth() {
+                const containerWidth = slider.parentElement.clientWidth;
+                
+                if (window.innerWidth >= 992) {
+                    slidesPerView = 3;
+                } else if (window.innerWidth >= 768) {
+                    slidesPerView = 2;
+                } else {
+                    slidesPerView = 1;
+                }
+                
+                slideWidth = containerWidth / slidesPerView;
+                
+                slides.forEach(slide => {
+                    slide.style.flex = `0 0 ${100 / slidesPerView}%`;
+                });
+                
+                // Reset to first slide and recreate dots
+                goToSlide(0);
+                createDots();
+            }
+            
+            // Go to specific slide
+            function goToSlide(index) {
+                const maxIndex = slides.length - slidesPerView;
+                currentIndex = Math.min(Math.max(index, 0), maxIndex);
+                
+                const translateValue = -currentIndex * (100 / slidesPerView);
+                slider.style.transform = `translateX(${translateValue}%)`;
+                prevTranslate = translateValue;
+                
+                // Update active dot
+                const dots = document.querySelectorAll('.testimonial-dot');
+                dots.forEach((dot, i) => {
+                    dot.classList.toggle('active', i === Math.floor(currentIndex / slidesPerView));
+                });
+                
+                // Update active slides for visual highlight
+                slides.forEach((slide, i) => {
+                    // Remove active class from all slides
+                    slide.classList.remove('active');
+                    
+                    // Add active class to visible slides
+                    if (i >= currentIndex && i < currentIndex + slidesPerView) {
+                        slide.classList.add('active');
+                        
+                        // Add animation class briefly
+                        slide.classList.add('animate-slide-in');
+                        setTimeout(() => {
+                            slide.classList.remove('animate-slide-in');
+                        }, 800);
+                    }
+                });
+            }
+            
+            // Next slide
+            function nextSlide() {
+                if (currentIndex >= slides.length - slidesPerView) {
+                    // If at the end, go back to first slide
+                    goToSlide(0);
+                } else {
+                    goToSlide(currentIndex + slidesPerView);
+                }
+            }
+            
+            // Previous slide
+            function prevSlide() {
+                goToSlide(currentIndex - slidesPerView);
+            }
+            
+            // Touch and drag functionality
+            function touchStart(event) {
+                pauseAutoSlide();
+                isDragging = true;
+                startPos = getPositionX(event);
+                slider.style.transition = 'none';
+                slider.style.cursor = 'grabbing';
+            }
+            
+            function touchMove(event) {
+                if (isDragging) {
+                    const currentPosition = getPositionX(event);
+                    currentTranslate = prevTranslate + ((currentPosition - startPos) / slider.parentElement.clientWidth) * 100;
+                    
+                    // Add resistance at the edges
+                    if (currentTranslate > 0) {
+                        currentTranslate = currentTranslate * 0.3;
+                    } else if (currentTranslate < -(slides.length - slidesPerView) * (100 / slidesPerView)) {
+                        const extraTranslate = currentTranslate + (slides.length - slidesPerView) * (100 / slidesPerView);
+                        currentTranslate = -(slides.length - slidesPerView) * (100 / slidesPerView) + extraTranslate * 0.3;
+                    }
+                    
+                    slider.style.transform = `translateX(${currentTranslate}%)`;
+                }
+            }
+            
+            function touchEnd() {
+                isDragging = false;
+                slider.style.cursor = 'grab';
+                slider.style.transition = 'transform 0.5s ease';
+                
+                const movedBy = currentTranslate - prevTranslate;
+                
+                // If moved significantly, navigate to next/prev slide
+                if (movedBy < -5) {
+                    nextSlide();
+                } else if (movedBy > 5) {
+                    prevSlide();
+                } else {
+                    // Go back to current slide if not moved enough
+                    goToSlide(currentIndex);
+                }
+                
+                // Resume auto slide
+                startAutoSlide();
+            }
+            
+            function getPositionX(event) {
+                return event.type.includes('mouse') ? event.pageX : event.touches[0].clientX;
+            }
+            
+            // Function to start automatic slideshow
+            function startAutoSlide() {
+                // Clear any existing interval first
+                pauseAutoSlide();
+                
+                // Set new interval
+                autoSlideInterval = setInterval(nextSlide, 5000);
+            }
+            
+            // Function to pause automatic slideshow
+            function pauseAutoSlide() {
+                if (autoSlideInterval) {
+                clearInterval(autoSlideInterval);
+                    autoSlideInterval = null;
+                }
+            }
+            
+            // Add drag functionality event listeners
+            slider.addEventListener('mousedown', touchStart);
+            slider.addEventListener('touchstart', touchStart);
+            
+            slider.addEventListener('mousemove', touchMove);
+            slider.addEventListener('touchmove', touchMove);
+            
+            slider.addEventListener('mouseup', touchEnd);
+            slider.addEventListener('touchend', touchEnd);
+            slider.addEventListener('mouseleave', () => {
+                if (isDragging) touchEnd();
+            });
+            
+            // Prevent context menu on long press
+            slider.addEventListener('contextmenu', e => e.preventDefault());
+            
+            // Add event listeners for buttons
+            prevBtn.addEventListener('click', function() {
+                pauseAutoSlide();
+                prevSlide();
+                startAutoSlide();
+            });
+            
+            nextBtn.addEventListener('click', function() {
+                pauseAutoSlide();
+                nextSlide();
+                startAutoSlide();
+            });
+            
+            // Pause auto slide on hover
+            slider.parentElement.addEventListener('mouseenter', pauseAutoSlide);
+            
+            // Resume auto slide when mouse leaves
+            slider.parentElement.addEventListener('mouseleave', startAutoSlide);
+            
+            // Initialize slider
+            setSlideWidth();
+            createDots();
+            startAutoSlide();
+            
+            // Update on window resize
+            window.addEventListener('resize', () => {
+                setSlideWidth();
+                goToSlide(Math.floor(currentIndex / slidesPerView) * slidesPerView);
+            });
+            
+            // Smooth scrolling for anchor links
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function(e) {
+                    if (this.getAttribute('href') !== '#') {
+                        e.preventDefault();
+                        
+                        const targetId = this.getAttribute('href');
+                        const targetElement = document.querySelector(targetId);
+                        
+                        if (targetElement) {
+                            window.scrollTo({
+                                top: targetElement.offsetTop - 70, // Adjust for header height
+                                behavior: 'smooth'
+                            });
+                        }
+                    }
+                });
+            });
+            
+            // Add background to header on scroll
+            const header = document.querySelector('.landing-header');
+            window.addEventListener('scroll', function() {
+                if (window.scrollY > 50) {
+                    header.classList.add('scrolled');
+                } else {
+                    header.classList.remove('scrolled');
+                }
+            });
+            
+            // Check initial scroll position
+            if (window.scrollY > 50) {
+                header.classList.add('scrolled');
+            }
+            
+            // Dark mode toggle functionality
+            const darkModeToggle = document.querySelector('.dark-mode-toggle');
+            
+            // Check for saved preference
+            const savedMode = localStorage.getItem('darkMode');
+            const prefersDarkMode = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+            
+            // Apply dark mode if saved or if user prefers dark mode
+            if (savedMode === 'dark' || (savedMode === null && prefersDarkMode)) {
+                document.body.classList.add('dark-mode');
+                darkModeToggle.querySelector('i').classList.replace('fa-moon', 'fa-sun');
+                darkModeToggle.querySelector('.tooltip-text').textContent = 'Switch to light mode';
+            }
+            
+            // Add click event for dark mode toggle
+            darkModeToggle.addEventListener('click', function() {
+                document.body.classList.toggle('dark-mode');
+                
+                const icon = this.querySelector('i');
+                const tooltipText = this.querySelector('.tooltip-text');
+                
+                if (document.body.classList.contains('dark-mode')) {
+                    localStorage.setItem('darkMode', 'dark');
+                    icon.classList.replace('fa-moon', 'fa-sun');
+                    tooltipText.textContent = 'Switch to light mode';
+                } else {
+                    localStorage.setItem('darkMode', 'light');
+                    icon.classList.replace('fa-sun', 'fa-moon');
+                    tooltipText.textContent = 'Switch to dark mode';
+                }
+            });
+            
+            // Parallax effect for hero background
+            window.addEventListener('scroll', function() {
+                const scrollPosition = window.pageYOffset;
+                const heroBackground = document.querySelector('.hero-bg');
+                heroBackground.style.transform = 'translateY(' + scrollPosition * 0.5 + 'px)';
+            });
+        });
+    </script>
+    
+    <!-- Script for counter animation -->
+    <script>
+        // Counter animation for statistics
+        function animateCounters() {
+            const counters = document.querySelectorAll('.stat-number');
+            const speed = 200; // The lower the faster
+            
+            counters.forEach(counter => {
+                const target = +counter.getAttribute('data-count');
+                let count = 0;
+                const increment = target / speed;
+                
+                const updateCount = () => {
+                    if (count < target) {
+                        count += increment;
+                        counter.innerText = Math.floor(count);
+                        requestAnimationFrame(updateCount);
+                    } else {
+                        counter.innerText = target;
+                    }
+                };
+                
+                updateCount();
+            });
+        }
+        
+        // Check if element is in viewport
+        function isInViewport(element) {
+            const rect = element.getBoundingClientRect();
+            return (
+                rect.top <= (window.innerHeight || document.documentElement.clientHeight) &&
+                rect.bottom >= 0 &&
+                rect.left <= (window.innerWidth || document.documentElement.clientWidth) &&
+                rect.right >= 0
+            );
+        }
+        
+        // Start animation when stats section comes into view
+        function checkStatsVisibility() {
+            const statsSection = document.querySelector('.stats');
+            if (statsSection && isInViewport(statsSection) && !statsSection.classList.contains('animated')) {
+                statsSection.classList.add('animated');
+                animateCounters();
+            }
+        }
+        
+        document.addEventListener('scroll', checkStatsVisibility);
+        window.addEventListener('load', checkStatsVisibility);
+        window.addEventListener('resize', checkStatsVisibility);
+    </script>
+    
+    <!-- Script for additional animations -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Add typing effect to hero heading
+            const heroHeading = document.querySelector('.hero h1');
+            if (heroHeading) {
+                heroHeading.innerHTML = heroHeading.textContent.replace(/\S/g, "<span class='letter'>$&</span>");
+                
+                const letters = document.querySelectorAll('.letter');
+                letters.forEach((letter, index) => {
+                    letter.style.animationDelay = `${index * 0.05}s`;
+                    letter.style.opacity = '0';
+                    letter.style.animation = 'fadeInUp 0.5s forwards';
+                });
+            }
+            
+            // Add entrance animations to feature cards
+            const featureCards = document.querySelectorAll('.feature-card');
+            featureCards.forEach((card, index) => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(50px)';
+                card.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+                card.style.transitionDelay = `${index * 0.1}s`;
+            });
+            
+            // Function to check if element is in viewport and animate
+            function animateOnScroll() {
+                featureCards.forEach(card => {
+                    const cardPosition = card.getBoundingClientRect().top;
+                    const windowHeight = window.innerHeight;
+                    
+                    if (cardPosition < windowHeight - 100) {
+                        card.style.opacity = '1';
+                        card.style.transform = 'translateY(0)';
+                    }
+                });
+                
+                // Animate testimonial cards
+                const testimonialCards = document.querySelectorAll('.testimonial-card');
+                testimonialCards.forEach((card, index) => {
+                    const cardPosition = card.getBoundingClientRect().top;
+                    const windowHeight = window.innerHeight;
+                    
+                    if (cardPosition < windowHeight - 100) {
+                        card.style.opacity = '1';
+                        card.style.transform = 'translateY(0)';
+                        card.style.transitionDelay = `${index * 0.1}s`;
+                    }
+                });
+            }
+            
+            // Set initial state for testimonial cards
+            const testimonialCards = document.querySelectorAll('.testimonial-card');
+            testimonialCards.forEach(card => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(50px)';
+                card.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+            });
+            
+            // Run animation checks
+            window.addEventListener('scroll', animateOnScroll);
+            animateOnScroll(); // Run once on load
+        });
+    </script>
+    
+    <!-- Particles.js for animated backgrounds -->
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            if (typeof particlesJS !== 'undefined') {
+                particlesJS("particles-js", {
+                    "particles": {
+                        "number": {
+                            "value": 80,
+                            "density": {
+                                "enable": true,
+                                "value_area": 800
+                            }
+                        },
+                        "color": {
+                            "value": "#ffffff"
+                        },
+                        "shape": {
+                            "type": "circle",
+                            "stroke": {
+                                "width": 0,
+                                "color": "#000000"
+                            },
+                        },
+                        "opacity": {
+                            "value": 0.5,
+                            "random": true,
+                        },
+                        "size": {
+                            "value": 3,
+                            "random": true,
+                        },
+                        "line_linked": {
+                            "enable": true,
+                            "distance": 150,
+                            "color": "#ffffff",
+                            "opacity": 0.4,
+                            "width": 1
+                        },
+                        "move": {
+                            "enable": true,
+                            "speed": 2,
+                            "direction": "none",
+                            "random": true,
+                            "straight": false,
+                            "out_mode": "out",
+                            "bounce": false,
+                        }
+                    },
+                    "interactivity": {
+                        "detect_on": "canvas",
+                        "events": {
+                            "onhover": {
+                                "enable": true,
+                                "mode": "grab"
+                            },
+                            "onclick": {
+                                "enable": true,
+                                "mode": "push"
+                            },
+                            "resize": true
+                        },
+                        "modes": {
+                            "grab": {
+                                "distance": 140,
+                                "line_linked": {
+                                    "opacity": 1
+                                }
+                            },
+                            "push": {
+                                "particles_nb": 4
+                            }
+                        }
+                    },
+                    "retina_detect": true
+                });
+            }
+        });
+    </script>
+    
+    <script>
+        // Parallax effect for hero background
+        window.addEventListener('scroll', function() {
+            const scrollPosition = window.pageYOffset;
+            const heroBackground = document.querySelector('.hero-bg');
+            heroBackground.style.transform = 'translateY(' + scrollPosition * 0.5 + 'px)';
+        });
+        
+        // Animate elements when they come into view
+        document.addEventListener('DOMContentLoaded', function() {
+            const animateOnScroll = function() {
+                const featureCards = document.querySelectorAll('.feature-card');
+                
+                featureCards.forEach((card, index) => {
+                    const cardPosition = card.getBoundingClientRect().top;
+                    const screenPosition = window.innerHeight / 1.2;
+                    
+                    if (cardPosition < screenPosition) {
+                        setTimeout(() => {
+                            card.style.opacity = '1';
+                            card.style.transform = 'translateY(0)';
+                        }, index * 150);
+                    }
+                });
+            };
+            
+            // Set initial state for animation
+            const featureCards = document.querySelectorAll('.feature-card');
+            featureCards.forEach(card => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(30px)';
+                card.style.transition = 'all 0.6s ease-out';
+            });
+            
+            // Run on load
+            animateOnScroll();
+            
+            // Run on scroll
+            window.addEventListener('scroll', animateOnScroll);
+        });
+    </script>
+</body>
+</html> 

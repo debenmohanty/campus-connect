@@ -1,0 +1,8 @@
+.danger-link {
+    color: #dc3545 !important;
+}
+
+.sidebar .danger-link:hover {
+    color: #ffffff !important;
+    background-color: #dc3545;
+} 

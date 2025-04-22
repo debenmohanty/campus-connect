@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Users</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            display: flex;
+            justify-content: center;
+            padding: 30px;
+            background-color: #f5f5f5;
+            margin: 0;
+        }
+        .container {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            padding: 30px;
+            text-align: center;
+            max-width: 800px;
+            width: 100%;
+        }
+        h1 {
+            color: #333;
+            margin-bottom: 20px;
+        }
+        .message {
+            margin: 20px 0;
+            padding: 15px;
+            border-radius: 5px;
+            font-size: 18px;
+        }
+        .info {
+            background-color: #cce5ff;
+            color: #004085;
+            border: 1px solid #b8daff;
+        }
+        .warning {
+            background-color: #fff3cd;
+            color: #856404;
+            border: 1px solid #ffeeba;
+        }
+        .button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            text-decoration: none;
+            display: inline-block;
+            margin: 10px 5px;
+        }
+        .button:hover {
+            background-color: #0069d9;
+        }
+        .home-button {
+            background-color: #6c757d;
+        }
+        .clear-button {
+            background-color: #dc3545;
+        }
+        .clear-button:hover {
+            background-color: #c82333;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+            font-weight: bold;
+        }
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        tr:hover {
+            background-color: #f1f1f1;
+        }
+        .user-type {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 14px;
+        }
+        .admin {
+            background-color: #d4edda;
+            color: #155724;
+        }
+        .student {
+            background-color: #cce5ff;
+            color: #004085;
+        }
+        .company {
+            background-color: #fff3cd;
+            color: #856404;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Registered Users</h1>
+        <div id="messageContainer"></div>
+        <div id="usersContainer"></div>
+        <div class="button-group">
+            <a href="index.html" class="button home-button">Go to Home</a>
+            <a href="clear-users.html" class="button clear-button">Manage Users</a>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const messageContainer = document.getElementById('messageContainer');
+            const usersContainer = document.getElementById('usersContainer');
+            
+            // Get users from localStorage
+            const registeredUsers = JSON.parse(localStorage.getItem('registeredUsers') || '{}');
+            const userCount = Object.keys(registeredUsers).length;
+            
+            if (userCount === 0) {
+                showMessage('No users registered in the system.', 'warning');
+            } else {
+                showMessage(`Found ${userCount} registered users.`, 'info');
+                displayUsers(registeredUsers);
+            }
+            
+            function displayUsers(users) {
+                // Create table
+                const table = document.createElement('table');
+                
+                // Create table header
+                const thead = document.createElement('thead');
+                const headerRow = document.createElement('tr');
+                
+                ['Username', 'Email', 'User Type', 'Full Name', 'Created On'].forEach(headerText => {
+                    const th = document.createElement('th');
+                    th.textContent = headerText;
+                    headerRow.appendChild(th);
+                });
+                
+                thead.appendChild(headerRow);
+                table.appendChild(thead);
+                
+                // Create table body
+                const tbody = document.createElement('tbody');
+                
+                Object.entries(users).forEach(([username, userData]) => {
+                    const row = document.createElement('tr');
+                    
+                    // Username
+                    const usernameCell = document.createElement('td');
+                    usernameCell.textContent = username;
+                    row.appendChild(usernameCell);
+                    
+                    // Email
+                    const emailCell = document.createElement('td');
+                    emailCell.textContent = userData.email || 'N/A';
+                    row.appendChild(emailCell);
+                    
+                    // User Type
+                    const typeCell = document.createElement('td');
+                    const typeSpan = document.createElement('span');
+                    typeSpan.classList.add('user-type', userData.userType);
+                    typeSpan.textContent = userData.userType || 'Unknown';
+                    typeCell.appendChild(typeSpan);
+                    row.appendChild(typeCell);
+                    
+                    // Full Name
+                    const nameCell = document.createElement('td');
+                    nameCell.textContent = userData.fullName || 'N/A';
+                    row.appendChild(nameCell);
+                    
+                    // Created Date
+                    const dateCell = document.createElement('td');
+                    const date = userData.createdAt 
+                        ? new Date(userData.createdAt).toLocaleString() 
+                        : 'N/A';
+                    dateCell.textContent = date;
+                    row.appendChild(dateCell);
+                    
+                    tbody.appendChild(row);
+                });
+                
+                table.appendChild(tbody);
+                usersContainer.appendChild(table);
+            }
+            
+            // Function to show messages
+            function showMessage(text, type) {
+                messageContainer.innerHTML = `<div class="message ${type}">${text}</div>`;
+            }
+        });
+    </script>
+</body>
+</html> 
