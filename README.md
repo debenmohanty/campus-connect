@@ -1,5 +1,5 @@
-# *THIS PROJECT IS UNDER WORK*
-# Placement Management System
+
+# Carrer Counselling  & Placement Management System
 
 Campus Connect
 
