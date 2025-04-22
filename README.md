@@ -63,6 +63,7 @@ A comprehensive web application for managing student placements, job opportuniti
 - Node.js (Backend)
 - Local Storage for data persistence
 - SQL for database (setup with setup-db.sql)
+- websocket.io (for messaging of the student and faculty)
 
 ## Setup Instructions
 
